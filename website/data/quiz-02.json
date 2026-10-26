@@ -1,0 +1,66 @@
+{
+  "day": 2,
+  "title": "The 3D Software Landscape",
+  "questions": [
+    {
+      "question": "What does GLB stand for, and what makes it the preferred 3D web format?",
+      "options": [
+        "GL Binary — bundles geometry, materials, and textures in one optimized binary file",
+        "Graphics Library Bundle — a proprietary Autodesk format",
+        "Global Lighting Binary — stores only lighting data",
+        "Geometry and Light Bake — a Blender-specific export"
+      ],
+      "answer": 0,
+      "correct": 0,
+      "explanation": "GLB (GL Binary) is the binary version of the GLTF format. It packages geometry, textures, materials, and animations into a single file, making it fast to load and easy to manage — ideal for web use."
+    },
+    {
+      "question": "What is React Three Fiber?",
+      "options": [
+        "A CSS library for 3D transforms",
+        "A React renderer that lets you write Three.js scenes with JSX components",
+        "A new WebGL API replacing Three.js",
+        "A no-code 3D tool like Spline but for React apps"
+      ],
+      "answer": 1,
+      "correct": 1,
+      "explanation": "React Three Fiber (R3F) is a React renderer for Three.js. It maps JSX components (<mesh>, <boxGeometry>, etc.) to Three.js objects, enabling you to use React's component model and hooks for 3D."
+    },
+    {
+      "question": "Which tool would you use to add a 3D hero animation to a marketing landing page WITHOUT writing any Three.js code?",
+      "options": [
+        "Blender",
+        "GLTFLoader",
+        "Spline",
+        "Rapier.js"
+      ],
+      "answer": 2,
+      "correct": 2,
+      "explanation": "Spline is a no-code 3D design tool that lets you build interactive scenes visually in the browser and export them as embeddable web components — no Three.js knowledge required."
+    },
+    {
+      "question": "What is Sketchfab primarily used for in a 3D web workflow?",
+      "options": [
+        "Writing GLSL shaders",
+        "Discovering and downloading free and paid 3D model assets",
+        "Hosting your deployed Three.js app",
+        "Compressing textures for the web"
+      ],
+      "answer": 1,
+      "correct": 1,
+      "explanation": "Sketchfab is an online marketplace and repository of 3D models. Thousands of free Creative Commons models are available to download in GLTF/GLB format and use in your web projects."
+    },
+    {
+      "question": "When would you choose vanilla Three.js over React Three Fiber?",
+      "options": [
+        "When building a game with complex physics and no React UI",
+        "When the project uses React hooks",
+        "When you want Suspense-based loading",
+        "When using Spline components alongside your 3D"
+      ],
+      "answer": 0,
+      "correct": 0,
+      "explanation": "Vanilla Three.js is preferable for non-React projects, standalone demos, or games where the React component overhead isn't needed and you want direct, low-level control of the render loop."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "day": 7,
+  "title": "Week 1 Capstone: AI 3D Hero Section",
+  "questions": [
+    {
+      "question": "After loading a GLB with GLTFLoader, the model appears at a random position and is either tiny or enormous. What is the standard fix?",
+      "options": [
+        "Pass a scale parameter directly to GLTFLoader",
+        "Compute a Box3 bounding box, then reposition and scale the model to fit a known unit size",
+        "Use OrbitControls to let the user manually find the model",
+        "Switch to OBJLoader which handles sizing automatically"
+      ],
+      "answer": 1,
+      "explanation": "GLTFLoader does not normalize scale or origin. You must compute a Box3 bounding box with setFromObject(), extract the center and max dimension, then translate and scale the gltf.scene to fit your desired unit size."
+    },
+    {
+      "question": "Why should you call renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) instead of just renderer.setPixelRatio(window.devicePixelRatio)?",
+      "options": [
+        "Three.js throws an error if pixel ratio exceeds 2",
+        "Devices with DPR above 2 provide no visible quality gain but significantly increase GPU workload",
+        "Pixel ratios above 2 cause texture loading failures",
+        "The canvas element does not support DPR values higher than 2"
+      ],
+      "answer": 1,
+      "explanation": "Rendering at 3x or 4x pixel ratio on high-DPI devices offers no meaningful visual improvement to the viewer but can triple the number of pixels the GPU must process, harming performance and battery life."
+    },
+    {
+      "question": "You show a <canvas> element as the Three.js rendering target inside a hero section. The canvas looks blurry when first displayed, before the GLB loads. What should you add?",
+      "options": [
+        "A CSS spinner overlay that is hidden in the GLTFLoader onLoad callback",
+        "A second canvas showing a placeholder shape",
+        "A setTimeout to delay scene initialization",
+        "The alpha: false option on WebGLRenderer"
+      ],
+      "answer": 0,
+      "explanation": "Show a loading spinner (or skeleton) positioned absolutely over the canvas, then hide it inside the GLTFLoader onLoad callback. This prevents a confusing blank or partially-rendered canvas state during the network fetch."
+    },
+    {
+      "question": "Which Three.js renderer option allows the canvas background to be transparent so the page's CSS background shows through?",
+      "options": [
+        "renderer.transparent = true",
+        "scene.background = null",
+        "alpha: true in the WebGLRenderer constructor",
+        "renderer.setClearColor(0x000000, 0)"
+      ],
+      "answer": 2,
+      "explanation": "Passing alpha: true to the WebGLRenderer constructor enables a transparent framebuffer. You can also set scene.background = null and clear alpha to 0 after enabling alpha, but the constructor option is the primary switch."
+    },
+    {
+      "question": "In the animation loop you write: model.position.y = Math.sin(t * 0.8) * 0.08. What does multiplying by 0.08 control?",
+      "options": [
+        "The speed of the floating animation",
+        "The amplitude - how far the model moves up and down",
+        "The number of complete float cycles per second",
+        "The easing curve applied to the float"
+      ],
+      "answer": 1,
+      "explanation": "The 0.08 is the amplitude multiplier - it limits the maximum displacement to 0.08 Three.js units above and below the center. The 0.8 value controls the frequency (how fast it oscillates). Increasing 0.08 makes the float more dramatic."
+    }
+  ]
+}

@@ -1,0 +1,394 @@
+[
+  {
+    "term": "What is a vertex in 3D graphics?",
+    "definition": "A point in 3D space defined by X, Y, Z coordinates. Vertices are the building blocks of all 3D geometry."
+  },
+  {
+    "term": "What is a mesh?",
+    "definition": "A collection of vertices, edges, and faces (polygons) that together define the shape of a 3D object."
+  },
+  {
+    "term": "What does PBR stand for in materials?",
+    "definition": "Physically Based Rendering — a shading model that simulates how light interacts with surfaces using real-world material properties (albedo, roughness, metalness, normals)."
+  },
+  {
+    "term": "What is UV mapping?",
+    "definition": "The process of projecting a 2D texture image onto a 3D surface. U and V are the 2D coordinates (like X and Y, but for texture space)."
+  },
+  {
+    "term": "What are the three main light types in 3D?",
+    "definition": "Directional (like the sun, parallel rays), Point (like a bulb, emits in all directions), and Spot (like a flashlight, cone-shaped). Ambient light adds a flat base brightness."
+  },
+  {
+    "term": "What is a normal map?",
+    "definition": "A texture that stores surface direction data (normals) to simulate fine surface detail (bumps, scratches) without adding real geometry."
+  },
+  {
+    "term": "What file format is known as the 'JPEG of 3D'?",
+    "definition": "GLB / GLTF — the GL Transmission Format. It bundles geometry, materials, textures, and animations into a single optimized binary file ideal for the web."
+  },
+  {
+    "term": "What is Three.js?",
+    "definition": "A JavaScript library that wraps WebGL, providing a higher-level API for creating 3D scenes in the browser without writing raw GPU shader code."
+  },
+  {
+    "term": "What is React Three Fiber (R3F)?",
+    "definition": "A React renderer for Three.js. It lets you build Three.js scenes declaratively with JSX components like <mesh>, <boxGeometry>, and <Canvas>."
+  },
+  {
+    "term": "What is Spline?",
+    "definition": "A no-code, browser-based 3D design tool that lets you create interactive 3D scenes and export them as embeddable web components — no coding required."
+  },
+  {
+    "term": "What is Blender used for in a web 3D workflow?",
+    "definition": "Blender is a free open-source 3D modeling, rigging, and animation suite. In web workflows it's used to clean up AI-generated meshes, fix UV maps, and export optimized GLB files."
+  },
+  {
+    "term": "What is Meshy.ai?",
+    "definition": "An AI tool that generates 3D models from text prompts or images. It outputs GLB/OBJ files with textures, ready to load in Three.js."
+  },
+  {
+    "term": "What is Tripo3D?",
+    "definition": "A fast AI 3D generation tool that converts text or image prompts into 3D models in seconds, optimized for speed and polygon quality."
+  },
+  {
+    "term": "What output formats do AI 3D tools typically produce?",
+    "definition": "GLB (binary GLTF), OBJ (geometry + MTL material file), and FBX (common for animation rigs). GLB is preferred for the web."
+  },
+  {
+    "term": "What is retopology?",
+    "definition": "The process of recreating a 3D model's surface with cleaner, more optimized geometry. AI-generated meshes often need retopology to reduce polygon count and fix mesh flow."
+  },
+  {
+    "term": "Name a good text-to-3D AI prompt strategy.",
+    "definition": "Be specific about shape, material, and scale: 'a low-poly ceramic coffee mug, blue glaze, 4 inches tall, smooth surface' outperforms 'a mug'."
+  },
+  {
+    "term": "What are the three essentials of every Three.js scene?",
+    "definition": "A Scene (container for objects), a Camera (defines the viewpoint), and a Renderer (draws the scene to a canvas element using WebGL)."
+  },
+  {
+    "term": "What is the Three.js animation loop pattern?",
+    "definition": "function animate() { requestAnimationFrame(animate); renderer.render(scene, camera); } animate(); — calls itself recursively via requestAnimationFrame, targeting 60fps."
+  },
+  {
+    "term": "What is the difference between MeshBasicMaterial and MeshStandardMaterial?",
+    "definition": "MeshBasicMaterial ignores lighting and always renders at full color. MeshStandardMaterial uses PBR and responds to scene lights, producing realistic shading."
+  },
+  {
+    "term": "How do you load a GLB model in Three.js?",
+    "definition": "Use GLTFLoader from three/examples/jsm/loaders/GLTFLoader.js: loader.load('model.glb', (gltf) => { scene.add(gltf.scene); })"
+  },
+  {
+    "term": "What is OrbitControls?",
+    "definition": "A Three.js helper that adds mouse-driven camera orbiting, panning, and zooming around a target point. Import from three/examples/jsm/controls/OrbitControls.js."
+  },
+  {
+    "term": "What is the <Canvas> component in React Three Fiber?",
+    "definition": "The root component that creates a Three.js renderer and scene, attaches to a DOM canvas element, and provides the R3F rendering context for all child components."
+  },
+  {
+    "term": "What does the useFrame hook do in R3F?",
+    "definition": "Runs a callback every frame (inside the render loop), receiving the state and delta time. Used for animations: mesh.current.rotation.y += delta"
+  },
+  {
+    "term": "What is @react-three/drei?",
+    "definition": "A helper library for React Three Fiber that provides ready-made components like <OrbitControls>, <Environment>, <Html>, <Text>, and hooks like useGLTF."
+  },
+  {
+    "term": "How does useGLTF differ from GLTFLoader?",
+    "definition": "useGLTF (from @react-three/drei) is a React hook that loads a GLB with Suspense support and caches the result. It's declarative and works with React's rendering model."
+  },
+  {
+    "term": "What is React Suspense used for in R3F?",
+    "definition": "To handle async loading of 3D assets. Wrap components in <Suspense fallback={<LoadingUI />}> so the scene renders a placeholder while models/textures load."
+  },
+  {
+    "term": "What makes Spline suitable for non-coders?",
+    "definition": "A drag-and-drop editor with a built-in physics engine, interaction system, and one-click export to embed code — no Three.js or shader knowledge needed."
+  },
+  {
+    "term": "How do you embed a Spline scene in a webpage?",
+    "definition": "Use the <spline-viewer> web component: <script type='module' src='https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js'></script> then <spline-viewer url='...'></spline-viewer>"
+  },
+  {
+    "term": "What is @splinetool/react-spline?",
+    "definition": "The official React package for Spline. Install with npm, then: import Spline from '@splinetool/react-spline'; <Spline scene='...' />"
+  },
+  {
+    "term": "What polygon budget should you target for a Spline web scene?",
+    "definition": "Under 50k triangles total for good performance. Use Spline's built-in simplify tool and keep textures at 1024x1024 or smaller for mobile-friendly load times."
+  },
+  {
+    "term": "What is GLTFLoader's bounding box trick used for?",
+    "definition": "After loading a model, compute its bounding box, find the center, and reposition the model to center it at the origin — ensures it appears centered regardless of export origin."
+  },
+  {
+    "term": "What CSS property makes a Three.js canvas fill its parent?",
+    "definition": "Set width: 100%; height: 100%; on the canvas, and position: relative; with a defined height on the container. Use renderer.setSize(container.offsetWidth, container.offsetHeight)."
+  },
+  {
+    "term": "How do you add a subtle float animation to a 3D object?",
+    "definition": "In the animation loop: object.position.y = Math.sin(clock.getElapsedTime() * 0.8) * 0.1; — this oscillates the Y position using a sine wave."
+  },
+  {
+    "term": "What is a common mobile fallback for heavy 3D hero sections?",
+    "definition": "Detect touch/mobile with (window.matchMedia('(hover: none)').matches), then either show a static image, reduce polygon count, or disable the canvas entirely on very slow devices."
+  },
+  {
+    "term": "What is NeRF?",
+    "definition": "Neural Radiance Field — an AI technique that reconstructs a 3D scene from 2D photos by training a neural network to predict volume density and color from any viewpoint."
+  },
+  {
+    "term": "What is photogrammetry?",
+    "definition": "A technique that reconstructs 3D geometry from overlapping photos by finding matching feature points and computing depth. Apps like Polycam use it for mobile 3D capture."
+  },
+  {
+    "term": "What is Luma AI used for?",
+    "definition": "Capturing NeRF-based 3D scenes from video using a mobile device. The output can be exported as a GLTF/GLB for use in web projects."
+  },
+  {
+    "term": "What is DRACOLoader and when should you use it?",
+    "definition": "A Three.js loader extension that decompresses Draco-compressed GLB files. Use it whenever your GLB was exported with Draco compression to reduce download size by 80-90%."
+  },
+  {
+    "term": "What is an albedo map?",
+    "definition": "The base color texture of a surface — what it would look like under pure white, flat light with no shadows. Also called a diffuse map."
+  },
+  {
+    "term": "What is a roughness map?",
+    "definition": "A grayscale texture where white = rough (diffuse reflections) and black = smooth (mirror-like reflections). Controls the sharpness of light reflections."
+  },
+  {
+    "term": "Why must albedo textures use SRGBColorSpace in Three.js?",
+    "definition": "Albedo textures are authored in gamma (sRGB) color space by artists. Three.js defaults to linear space, so setting SRGBColorSpace corrects the color and prevents washed-out appearance."
+  },
+  {
+    "term": "What is Polyhaven?",
+    "definition": "A free online library of CC0 (public domain) PBR textures, HDR environment maps, and 3D models. Everything is free for commercial use, no attribution required."
+  },
+  {
+    "term": "What is an AO (Ambient Occlusion) map?",
+    "definition": "A grayscale texture that darkens crevices and contact areas where indirect light is blocked. Applied to a second UV channel in Three.js via material.aoMap and geometry.setAttribute('uv2', ...)."
+  },
+  {
+    "term": "What is a skeletal animation rig?",
+    "definition": "A hierarchy of bones (an armature) that deform a mesh's vertices. Each vertex is 'weighted' to one or more bones, so moving a bone moves the connected mesh geometry."
+  },
+  {
+    "term": "What is Mixamo used for?",
+    "definition": "Adobe's free service that auto-rigs a humanoid character (uploads a GLB/FBX → AI detects the skeleton) and provides a library of thousands of pre-made animations to download."
+  },
+  {
+    "term": "What is AnimationMixer in Three.js?",
+    "definition": "The object that manages and plays animation clips on a 3D model. Create it with new THREE.AnimationMixer(model), then get actions with mixer.clipAction(clip) and call action.play()."
+  },
+  {
+    "term": "Why do you call mixer.update(delta) in the animation loop?",
+    "definition": "The AnimationMixer needs to advance its internal clock each frame. delta is the elapsed time since the last frame (from clock.getDelta()), ensuring animations play at the correct speed."
+  },
+  {
+    "term": "What is animation blending?",
+    "definition": "Smoothly transitioning between two animation clips by fading one out and another in. Use action.crossFadeTo(nextAction, 0.5) in Three.js for a 0.5-second blend."
+  },
+  {
+    "term": "What is scroll-driven 3D?",
+    "definition": "A technique where 3D scene properties (camera position, object rotation, material opacity) change in response to the page scroll position, creating cinematic parallax experiences."
+  },
+  {
+    "term": "How do you link scroll position to a Three.js camera?",
+    "definition": "Listen to window.addEventListener('scroll', ...), compute scrollPercent = scrollY / (document.body.scrollHeight - window.innerHeight), then lerp camera.position along a path."
+  },
+  {
+    "term": "What is GSAP ScrollTrigger?",
+    "definition": "A GreenSock plugin that synchronizes GSAP animations to scroll position. In R3F, use @gsap/react with useGSAP to animate Three.js object properties on scroll."
+  },
+  {
+    "term": "What does CSS position: sticky do for a 3D canvas?",
+    "definition": "Keeps the canvas fixed in the viewport while the page content scrolls beneath it — a common pattern for Apple-style scroll experiences where 3D reacts to scroll but stays on screen."
+  },
+  {
+    "term": "What is a 3D product configurator?",
+    "definition": "An interactive 3D viewer where users can change product attributes (color, material, finish) in real time. The 3D model updates instantly without reloading."
+  },
+  {
+    "term": "What is @google/model-viewer?",
+    "definition": "A web component from Google that renders a GLB model with built-in OrbitControls, AR mode, and lazy loading. Add it with a script tag — no Three.js code required."
+  },
+  {
+    "term": "How do you switch materials at runtime in R3F?",
+    "definition": "Use useState for the selected variant, then pass it to the material: <meshStandardMaterial color={selectedColor} />. React re-renders update the material automatically."
+  },
+  {
+    "term": "What is an environment map in 3D rendering?",
+    "definition": "A 360° HDR image that wraps around the scene, reflecting off glossy surfaces. In R3F use <Environment preset='studio' /> from drei to instantly add realistic reflections."
+  },
+  {
+    "term": "What is the most effective prompt pattern for Three.js code generation?",
+    "definition": "Be specific about the result: 'Write a self-contained Three.js r160 module that renders a spinning torus knot with MeshNormalMaterial, OrbitControls, and a black background. Use import maps for dependencies.'"
+  },
+  {
+    "term": "Why might AI generate outdated Three.js code?",
+    "definition": "Three.js has breaking changes between versions (e.g., r152 vs r168 changed color spaces, geometry attributes, and loader paths). Always specify the version and verify against the official changelog."
+  },
+  {
+    "term": "How can you use AI to write GLSL shaders?",
+    "definition": "Describe the visual effect in plain English: 'Write a Three.js ShaderMaterial fragment shader that creates a pulsing gradient from teal to purple, animated with a u_time uniform.'"
+  },
+  {
+    "term": "What is a good AI workflow for debugging Three.js errors?",
+    "definition": "Paste the full error + the relevant code snippet + the Three.js version. Ask: 'This Three.js r168 scene gives this error. What changed in recent versions that could cause this?'"
+  },
+  {
+    "term": "What R3F hook loads a GLB asynchronously with caching?",
+    "definition": "useGLTF from @react-three/drei: const { scene } = useGLTF('/model.glb'). Works with React Suspense — the component suspends until the model is loaded."
+  },
+  {
+    "term": "What is the <Environment> component from drei?",
+    "definition": "Adds IBL (Image-Based Lighting) to an R3F scene using a preset HDR environment. <Environment preset='studio' /> applies global reflections and ambient lighting instantly."
+  },
+  {
+    "term": "How do you handle loading states in R3F?",
+    "definition": "Wrap the 3D component in <Suspense fallback={<Html><div>Loading...</div></Html>}>. The scene renders the fallback until all async assets (models, textures) resolve."
+  },
+  {
+    "term": "What Vite command creates a React project?",
+    "definition": "npm create vite@latest my-project -- --template react, then cd my-project && npm install && npm install three @react-three/fiber @react-three/drei"
+  },
+  {
+    "term": "What is a game loop?",
+    "definition": "A continuous cycle that runs every frame: 1) Read input, 2) Update game state, 3) Render the scene. In Three.js this maps to requestAnimationFrame calling an animate() function."
+  },
+  {
+    "term": "How do you handle keyboard input in a Three.js game?",
+    "definition": "Track key states in an object: const keys = {}; addEventListener('keydown', e => keys[e.code] = true); addEventListener('keyup', e => keys[e.code] = false). Check keys in the game loop."
+  },
+  {
+    "term": "What is Rapier.js?",
+    "definition": "A high-performance physics engine for the web (@dimforge/rapier3d-compat). It handles rigid body dynamics, collision detection, joints, and character controllers — pairs well with Three.js."
+  },
+  {
+    "term": "What is THREE.Clock used for in games?",
+    "definition": "It tracks real elapsed time. clock.getDelta() returns seconds since the last call, used to make movement frame-rate independent: position += speed * delta instead of a fixed amount."
+  },
+  {
+    "term": "What is AABB collision detection?",
+    "definition": "Axis-Aligned Bounding Box — the simplest collision check. Creates box-shaped hitboxes aligned to world axes. Three.js Box3 supports this with box.intersectsBox(otherBox)."
+  },
+  {
+    "term": "What is LOD in game development?",
+    "definition": "Level of Detail — swapping high-polygon models for lower-polygon versions as the camera moves away. Three.js has a built-in LOD object: scene.add(new THREE.LOD())."
+  },
+  {
+    "term": "What is a reasonable polygon budget for a web game object on mobile?",
+    "definition": "~5,000 triangles per major character/object on mobile, ~50,000 on desktop. Keep total scene polygons under 300k for smooth 60fps on mid-range devices."
+  },
+  {
+    "term": "What is Kenney.nl?",
+    "definition": "A website by Kenney Vleugels offering thousands of free CC0 2D and 3D game assets (characters, environments, UI) — great for prototyping without creating assets from scratch."
+  },
+  {
+    "term": "What AI tool auto-rigs a custom 3D character for game animation?",
+    "definition": "Mixamo (Adobe) automatically detects the skeleton of an uploaded humanoid mesh and generates a rig, plus hundreds of downloadable animation clips in FBX or GLB format."
+  },
+  {
+    "term": "What are the two shader stages in WebGL?",
+    "definition": "Vertex shader (runs once per vertex, outputs gl_Position to place it in screen space) and Fragment shader (runs once per visible pixel/fragment, outputs the final color)."
+  },
+  {
+    "term": "What is a GLSL uniform?",
+    "definition": "A variable passed from JavaScript to a GLSL shader that stays constant across all vertices/fragments in a single draw call. Used for time, colors, resolution, mouse position, etc."
+  },
+  {
+    "term": "How do you animate a shader with time in Three.js?",
+    "definition": "Add a uniforms object: { u_time: { value: 0.0 } }, create a ShaderMaterial with it, then update uniforms.u_time.value = clock.getElapsedTime() in the animation loop."
+  },
+  {
+    "term": "What GLSL function produces a repeating wave pattern?",
+    "definition": "sin() — for example: float wave = sin(position.x * 5.0 + u_time * 2.0); produces a wave that moves over time. Multiply by an amplitude to control wave height."
+  },
+  {
+    "term": "What is shaderMaterial from @react-three/drei?",
+    "definition": "A factory function that creates a reusable Three.js ShaderMaterial as a typed R3F component: const WaveMaterial = shaderMaterial({ u_time: 0 }, vertexShader, fragmentShader)"
+  },
+  {
+    "term": "What is a draw call?",
+    "definition": "One instruction from CPU to GPU to render a batch of geometry. Minimizing draw calls is the #1 performance optimization — each separate mesh is typically one draw call."
+  },
+  {
+    "term": "What is InstancedMesh?",
+    "definition": "A Three.js class that renders thousands of identical objects in a single draw call using instancing. Each instance has its own transform matrix, but shares geometry and material."
+  },
+  {
+    "term": "What is Draco compression?",
+    "definition": "An open-source geometry compression algorithm developed by Google. It reduces GLB geometry data by 80-95%, dramatically cutting download sizes. Enable during Blender export or with gltf-transform."
+  },
+  {
+    "term": "What is KTX2 texture compression?",
+    "definition": "A GPU-native texture format that stays compressed in GPU memory (unlike PNG/JPEG which decompress on upload). Reduces GPU memory usage by 4-8x. Use Basis Universal for cross-platform support."
+  },
+  {
+    "term": "What is frustum culling?",
+    "definition": "Automatically skipping rendering of objects outside the camera's view frustum. Three.js does this by default. Ensure mesh.frustumCulled = true (the default) is not accidentally disabled."
+  },
+  {
+    "term": "What are Blender's two main work modes for 3D objects?",
+    "definition": "Object Mode (manipulate whole objects: move, scale, rotate) and Edit Mode (edit vertices, edges, faces of individual geometry). Press Tab to toggle between them."
+  },
+  {
+    "term": "What is the Y-up vs Z-up problem in Blender exports?",
+    "definition": "Blender uses Z-up by default; GLTF/Three.js uses Y-up. The Blender GLTF exporter handles this automatically — but AI-generated models from other tools may arrive rotated 90°, requiring a manual rotation fix."
+  },
+  {
+    "term": "What gltf-transform command optimizes a GLB file?",
+    "definition": "npx gltf-transform optimize input.glb output.glb --draco applies Draco compression, texture resizing, and mesh simplification in one command. Install: npm install -g @gltf-transform/cli"
+  },
+  {
+    "term": "What Blender export settings matter most for web?",
+    "definition": "✓ Apply Transforms, ✓ Draco mesh compression, ✓ Include materials and textures, ✗ No cameras/lights unless needed. Keep 'Format' as glTF Binary (.glb) for a single file."
+  },
+  {
+    "term": "What is UV unwrapping in Blender?",
+    "definition": "The process of cutting a 3D mesh and flattening it to a 2D plane so textures can be applied. Without proper UV unwrapping, textures will stretch or tile incorrectly on the mesh."
+  },
+  {
+    "term": "When should you use Meshy vs Blender for a 3D asset?",
+    "definition": "Meshy: when you need an asset quickly and don't need precision control. Blender: when topology, exact dimensions, or animation rigs matter. Often best to start with Meshy and refine in Blender."
+  },
+  {
+    "term": "What is the typical AI-assisted 3D web pipeline order?",
+    "definition": "1) Text prompt → Meshy/Tripo3D, 2) Download GLB, 3) Optional Blender cleanup, 4) gltf-transform optimize, 5) AI textures/Mixamo animation, 6) Three.js/R3F rendering, 7) Deploy"
+  },
+  {
+    "term": "When should you use Spline instead of Three.js?",
+    "definition": "Use Spline for marketing sites, hero sections, and non-interactive showcases where you want fast iteration without code. Use Three.js/R3F when you need custom logic, game mechanics, or dynamic data."
+  },
+  {
+    "term": "What is the main advantage of React Three Fiber over vanilla Three.js?",
+    "definition": "Declarative JSX syntax, React's component model (reusability, hooks, context), and ecosystem integration (state management, routing). Vanilla Three.js is faster for low-level control and non-React projects."
+  },
+  {
+    "term": "What deployment platform is simplest for a Three.js project?",
+    "definition": "GitHub Pages (free, static hosting, automated via Actions) or Vercel (free tier, automatic deploys from git push, supports environment variables). Both work for static HTML/JS builds."
+  },
+  {
+    "term": "What is the difference between a 3D portfolio site and a 3D product configurator?",
+    "definition": "A portfolio site uses 3D for visual storytelling and aesthetics (hero sections, scroll effects). A configurator is an interactive tool where users change product attributes and see 3D updates in real time."
+  },
+  {
+    "term": "What is Shadertoy?",
+    "definition": "A browser-based GLSL shader playground and community. You can write, run, and share WebGL shaders directly in the browser — great for experimenting with visual effects after completing this course."
+  },
+  {
+    "term": "What is Three.js Journey?",
+    "definition": "A popular paid video course by Bruno Simon that teaches Three.js in depth — widely regarded as the best comprehensive Three.js learning resource for those wanting to go deeper after basics."
+  },
+  {
+    "term": "What does the <primitive> component do in R3F?",
+    "definition": "Renders any Three.js object directly in the JSX tree: <primitive object={gltf.scene} />. Used when you need to insert a pre-built Three.js object (like a loaded GLTF scene) into R3F."
+  },
+  {
+    "term": "What is the GLTF scene graph structure?",
+    "definition": "A GLTF file contains a tree of nodes (objects), each with a transform, mesh, and optional animation/skin data. The root is gltf.scene in Three.js, which you add to the Three.js Scene."
+  }
+]

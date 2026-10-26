@@ -1,0 +1,66 @@
+{
+  "day": 11,
+  "title": "3D for Websites: Scroll & Parallax",
+  "questions": [
+    {
+      "question": "What formula converts window.scrollY into a 0-to-1 normalized scroll progress value?",
+      "options": [
+        "window.scrollY / (document.body.scrollHeight - window.innerHeight)",
+        "window.scrollY / window.innerHeight",
+        "window.scrollY / document.body.scrollHeight",
+        "window.scrollY / document.documentElement.clientHeight"
+      ],
+      "correct": 0,
+      "explanation": "Dividing by (scrollHeight - innerHeight) gives 0 at the very top and 1 at the very bottom of the page, making it easy to map to any 3D property range.",
+      "answer": 0
+    },
+    {
+      "question": "What canvas positioning strategy makes the canvas active only while the user scrolls through a specific page section, then lets it scroll away?",
+      "options": [
+        "Fixed canvas (position: fixed)",
+        "Absolute canvas (position: absolute)",
+        "Relative canvas (position: relative)",
+        "Sticky canvas (position: sticky inside a tall container)"
+      ],
+      "correct": 3,
+      "explanation": "A sticky canvas has position: sticky and top: 0 inside a tall parent div. It pins to the viewport while that parent div is in the scroll range and exits naturally when the parent scrolls out.",
+      "answer": 3
+    },
+    {
+      "question": "Why do you lerp a 3D value toward the scroll target on every animation frame instead of setting it directly in the scroll event?",
+      "options": [
+        "Three.js requires values to be set inside requestAnimationFrame",
+        "Scroll events don't fire in all browsers",
+        "Lerping produces smooth per-frame interpolation; direct setting produces jittery motion",
+        "Setting values in scroll events causes memory leaks"
+      ],
+      "correct": 2,
+      "explanation": "Scroll events fire at irregular intervals and don't align with the render loop. Lerping inside requestAnimationFrame smoothly chases the target value each frame, eliminating choppiness.",
+      "answer": 2
+    },
+    {
+      "question": "What does the scrub: 1 option do in a GSAP ScrollTrigger configuration?",
+      "options": [
+        "It limits the scroll to one screen height",
+        "It ties animation progress to scroll with roughly 1 second of smoothing lag",
+        "It makes the animation run at 1x normal speed",
+        "It enables a single keyframe at the midpoint of the scroll range"
+      ],
+      "correct": 1,
+      "explanation": "scrub: true ties animation progress directly to scroll with no smoothing. scrub: 1 adds roughly 1 second of lag \u2014 the animation eases toward the scroll position, giving a smoother feel.",
+      "answer": 1
+    },
+    {
+      "question": "How does the parallax effect create the illusion of depth in a flat viewport?",
+      "options": [
+        "Objects at different Z positions move at different scroll rates, mimicking real-world depth cues",
+        "Objects at different depths are rendered with different blur amounts",
+        "The camera field of view narrows as the user scrolls down",
+        "CSS perspective is applied to the canvas element"
+      ],
+      "correct": 0,
+      "explanation": "Parallax exploits the fact that real objects closer to the viewer appear to move faster relative to the background. By driving foreground objects faster and background objects slower per unit of scroll, the brain reads the speed difference as depth.",
+      "answer": 0
+    }
+  ]
+}

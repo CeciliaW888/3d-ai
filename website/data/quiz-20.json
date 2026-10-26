@@ -1,0 +1,66 @@
+{
+  "day": 20,
+  "title": "Full AI-Assisted 3D Workflow",
+  "questions": [
+    {
+      "question": "In the six-stage pipeline, what happens at Stage 4 (Animate) and which tool is typically used?",
+      "options": [
+        "The mesh is uploaded to Mixamo for auto-rigging and motion-capture animation",
+        "Textures are generated with AI tools like Leonardo.ai",
+        "The model is compressed with gltf-transform and Draco",
+        "The model is loaded into R3F and rendered in the browser"
+      ],
+      "correct": 0,
+      "answer": 0,
+      "explanation": "Stage 4 is animation. Mixamo handles auto-rigging and provides over 2,000 free motion-capture animations. You upload your cleaned mesh and get back an animated FBX in minutes."
+    },
+    {
+      "question": "A developer is building a 3D product page with no coding team and a 1-week deadline. Which tool choice is most appropriate?",
+      "options": [
+        "React Three Fiber with custom GLSL shaders",
+        "Three.js with a full physics engine",
+        "Spline for a no-code embed or model-viewer web component",
+        "Blender with a custom Python export script"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "Spline's no-code editor and embed feature (or Google's model-viewer web component) are ideal when speed and simplicity matter more than custom code."
+    },
+    {
+      "question": "In the portfolio case study, approximately how long does the full AI-assisted pipeline take from prompt to deployed website?",
+      "options": [
+        "About 30 minutes",
+        "About 2 hours",
+        "About 1 week",
+        "About 8 hours"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "The case study estimates approximately 2 hours total: 15 min for Meshy, 20 min for Blender, 10 min for Mixamo, 5 min for optimization, 45 min for R3F code, and 5 min for Vercel deployment."
+    },
+    {
+      "question": "Which scenario is the best fit for using vanilla Three.js instead of React Three Fiber?",
+      "options": [
+        "Building a 3D product page inside an existing React application",
+        "Sharing 3D components across multiple React applications",
+        "Using Suspense and concurrent rendering features",
+        "Adding a 3D scene to a vanilla HTML/CSS/JS portfolio with no build step"
+      ],
+      "correct": 3,
+      "answer": 3,
+      "explanation": "Three.js is better for non-React projects. R3F requires a React app setup. For a vanilla HTML/JS portfolio, Three.js with a CDN import or simple npm setup is simpler and faster."
+    },
+    {
+      "question": "What does 'AI as accelerator, not replacement' mean in the context of this workflow?",
+      "options": [
+        "AI generates all assets automatically with no human input needed",
+        "AI compresses the tedious parts (mesh generation, rigging) while humans provide judgment, taste, and code",
+        "AI replaces the need to learn Three.js or Blender",
+        "AI handles mesh generation and textures so you can focus on writing more AI prompts"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "AI tools compress the time-consuming parts, but human judgment is essential for deciding what to build, adjusting what AI gets wrong, writing the rendering code, and ensuring the final result looks good."
+    }
+  ]
+}

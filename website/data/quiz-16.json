@@ -1,0 +1,61 @@
+{
+  "day": 16,
+  "title": "AI Game Asset Creation",
+  "questions": [
+    {
+      "question": "What is the correct order of stages in the AI game asset pipeline?",
+      "options": [
+        "Rig → Generate → Cleanup → Animate → Optimize",
+        "Generate → Cleanup → Optimize → Rig → Animate",
+        "Optimize → Generate → Rig → Cleanup → Animate",
+        "Generate → Rig → Cleanup → Animate → Optimize"
+      ],
+      "answer": 1,
+      "explanation": "The correct pipeline is: Generate (AI tool) → Cleanup (Blender) → Optimize (Draco/KTX2) → Rig (Mixamo) → Animate (NLA editor). Rigging before cleanup wastes time on geometry that may be removed."
+    },
+    {
+      "question": "What is the recommended maximum polygon (triangle) budget per object for a mobile web game?",
+      "options": [
+        "50,000 triangles",
+        "20,000 triangles",
+        "5,000 triangles",
+        "500,000 triangles"
+      ],
+      "answer": 2,
+      "explanation": "Mobile web targets 2,000–5,000 triangles per object. Mobile GPUs are significantly less powerful than desktop GPUs, and web games must run on 5-year-old phones as well as new devices."
+    },
+    {
+      "question": "In Three.js, which class handles switching between high and low polygon meshes as the camera distance changes?",
+      "options": [
+        "THREE.MeshLOD",
+        "THREE.LOD",
+        "THREE.DistanceMesh",
+        "THREE.AdaptiveMesh"
+      ],
+      "answer": 1,
+      "explanation": "THREE.LOD (Level of Detail) accepts multiple mesh levels with distance thresholds via .addLevel(mesh, distance). Call lod.update(camera) each frame and Three.js selects the appropriate level automatically."
+    },
+    {
+      "question": "Kenney.nl assets are licensed as CC0. What does CC0 mean for a game developer?",
+      "options": [
+        "Assets can only be used in non-commercial projects",
+        "Assets require attribution in the game credits",
+        "Assets are completely free with no attribution or usage restrictions",
+        "Assets can be used but not distributed with a game"
+      ],
+      "answer": 2,
+      "explanation": "CC0 (Creative Commons Zero) is a public domain dedication. The creator waives all copyright. You can use, modify, and distribute CC0 assets in commercial products with no attribution required."
+    },
+    {
+      "question": "Which compression format specifically reduces the size of GLTF geometry data (vertex positions, normals, UVs)?",
+      "options": [
+        "KTX2",
+        "WebP",
+        "Draco",
+        "Basis Universal"
+      ],
+      "answer": 2,
+      "explanation": "Draco (developed by Google) compresses GLTF/GLB geometry data — vertex positions, normals, and UV coordinates — by 5–10x with minimal quality loss. KTX2 and Basis Universal compress textures, not geometry."
+    }
+  ]
+}

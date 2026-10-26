@@ -1,0 +1,78 @@
+<section class="module" id="module-3">
+  <h2>Day 3: Text-to-3D AI — Meshy &amp; Tripo3D</h2>
+
+  <div class="callout-accent">
+    <strong>The shift:</strong> Until 2023, creating a 3D model took hours in Blender.
+    Today you type a sentence and get a textured, web-ready GLB in under 2 minutes.
+    AI 3D generation is the skill multiplier for everything else in this course.
+  </div>
+
+  <h3>How AI 3D Generation Works</h3>
+  <p>Modern text-to-3D tools use a combination of techniques under the hood:</p>
+  <ul>
+    <li><strong>Diffusion models</strong> — generate multi-view images of the object from the text prompt</li>
+    <li><strong>3D reconstruction</strong> — converts those multi-view images into a 3D mesh with estimated depth</li>
+    <li><strong>Texture projection</strong> — maps the generated images back onto the mesh as UV-unwrapped textures</li>
+  </ul>
+  <div class="callout-info">
+    Results vary significantly based on how specific your prompt is.
+    "A medieval sword" gives a generic result.
+    "A weathered iron longsword with a golden crossguard and leather grip wrap, game-ready low-poly" gives a much better one.
+  </div>
+
+  <h3>Meshy.ai Workflow</h3>
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <div>Go to <strong>meshy.ai</strong>, create a free account. You get free credits each day.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <div>Choose <strong>Text to 3D</strong>. Enter your prompt. Add a negative prompt for things to avoid (e.g., "blurry, low quality").</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <div>Meshy generates 4 previews. Pick the best one and refine it (runs the texture generation pass).</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">4</span>
+    <div>Download as <strong>GLB</strong>. Your file includes the mesh + PBR textures (albedo, normal, roughness) baked in.</div>
+  </div>
+
+  <h3>Loading Your GLB in Three.js</h3>
+  <pre><code class="language-js">import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+const loader = new GLTFLoader();
+loader.load('./my-model.glb', (gltf) => {
+  scene.add(gltf.scene);
+  // Center the model
+  const box = new THREE.Box3().setFromObject(gltf.scene);
+  const center = box.getCenter(new THREE.Vector3());
+  gltf.scene.position.sub(center);
+});</code></pre>
+
+  <div class="callout-warning">
+    <strong>AI 3D limitations:</strong> Generated meshes often have poor topology (irregular triangle distribution) and may need cleanup in Blender if you want to rig them for animation.
+    For static display on the web, they work great as-is.
+  </div>
+
+  <div class="quiz-card" data-correct="2" data-explanation-0="Multi-view diffusion generates images of the 3D object, which are then used to reconstruct geometry — it's not photogrammetry (which needs real photos)." data-explanation-1="NeRF is a 3D reconstruction technique used for captured scenes, not AI text-to-3D generation." data-explanation-2="Correct! Text-to-3D tools like Meshy generate multi-view images from the text prompt using diffusion, then reconstruct a 3D mesh with texture projection." data-explanation-3="Voxel modeling is a manual technique using 3D pixels (like Minecraft), not AI generation.">
+    <p class="quiz-question">How do tools like Meshy.ai generate a 3D model from a text prompt?</p>
+    <ul class="quiz-options">
+      <li>Photogrammetry from stored real-world photos</li>
+      <li>Neural Radiance Field (NeRF) training</li>
+      <li>Diffusion-generated multi-view images reconstructed into a mesh</li>
+      <li>Procedural voxel modeling</li>
+    </ul>
+  </div>
+
+  <div class="quiz-card" data-correct="0" data-explanation-0="Correct! GLB includes the geometry AND all PBR textures (albedo, normal, roughness, metalness, AO) embedded in a single binary file — ready to load with GLTFLoader." data-explanation-1="OBJ is geometry-only; textures are in a separate MTL file and the texture images are separate too." data-explanation-2="FBX is primarily used for game engines and includes animation rigs, but it's not the recommended format for direct web use." data-explanation-3="PNG is an image format — it cannot store 3D geometry.">
+    <p class="quiz-question">Why is GLB the best format to download from AI 3D tools for web projects?</p>
+    <ul class="quiz-options">
+      <li>It bundles geometry and PBR textures in one binary file, ready for Three.js</li>
+      <li>It is the lightest format with no texture data</li>
+      <li>It stores animation rigs better than any other format</li>
+      <li>It can be opened directly as an image</li>
+    </ul>
+  </div>
+</section>

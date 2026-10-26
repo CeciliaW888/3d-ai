@@ -1,0 +1,152 @@
+<section class="module" id="module-18">
+
+  <div class="callout-accent">
+    <span class="callout-icon">⚡</span>
+    <div class="callout-content">
+      <strong>Day 18 — Performance Optimization for Web 3D</strong>
+      A beautiful 3D scene that runs at 8 FPS ships nothing. Learn to measure, diagnose, and fix the real bottlenecks.
+    </div>
+  </div>
+
+  <h3>Why Web 3D Gets Slow</h3>
+
+  <div class="callout-warning">
+    <span class="callout-icon">🚧</span>
+    <div class="callout-content">
+      <strong>The #1 bottleneck is draw calls — not polygon count.</strong>
+      Every separate mesh with a separate material costs a draw call.
+      Most devices stall above 200–500 draw calls per frame.
+      500 separate trees = 500 draw calls. One instanced tree mesh = 1 draw call.
+    </div>
+  </div>
+
+  <p>The four main causes of slow 3D on the web:</p>
+  <ul>
+    <li><strong>Too many draw calls</strong> — each mesh/material pair triggers a GPU state change</li>
+    <li><strong>Too many polygons</strong> — every triangle is processed every frame</li>
+    <li><strong>Too much texture memory</strong> — uncompressed 2048×2048 RGBA = 16 MB of VRAM</li>
+    <li><strong>JavaScript overhead</strong> — your animation loop shares the main thread with the browser</li>
+  </ul>
+
+  <h3>Profiling: Measure Before You Fix</h3>
+
+<pre><code class="language-js">// Add the Stats panel (FPS, ms/frame, memory)
+import Stats from 'three/addons/libs/stats.module.js';
+const stats = new Stats();
+document.body.appendChild(stats.dom);
+
+// Check draw calls in real time
+setInterval(() => {
+  console.log('Draw calls:', renderer.info.render.calls);
+  console.log('Triangles:', renderer.info.render.triangles);
+}, 2000);
+
+function animate() {
+  requestAnimationFrame(animate);
+  stats.begin();
+  renderer.render(scene, camera);
+  stats.end();
+}
+</code></pre>
+
+  <div class="callout-info">
+    <span class="callout-icon">🔍</span>
+    <div class="callout-content">
+      <strong>Spector.js</strong> (Chrome extension) captures a single WebGL frame and shows every draw call, shader, and texture.
+      Install from the Chrome Web Store and click the extension icon while your scene is running.
+      The draw call count is your optimization baseline.
+    </div>
+  </div>
+
+  <h3>InstancedMesh: 1,000 Objects, 1 Draw Call</h3>
+
+<pre><code class="language-js">import * as THREE from 'three';
+
+const count = 1000;
+const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+const material = new THREE.MeshStandardMaterial({ color: 0x0d9488 });
+
+// InstancedMesh renders all 1000 copies in ONE draw call
+const mesh = new THREE.InstancedMesh(geometry, material, count);
+
+const matrix = new THREE.Matrix4();
+for (let i = 0; i &lt; count; i++) {
+  matrix.setPosition(
+    (Math.random() - 0.5) * 40,
+    (Math.random() - 0.5) * 40,
+    (Math.random() - 0.5) * 40
+  );
+  mesh.setMatrixAt(i, matrix);
+}
+// Required: tell Three.js to upload the matrix buffer to the GPU
+mesh.instanceMatrix.needsUpdate = true;
+
+scene.add(mesh);
+// renderer.info.render.calls: 1 (vs 1000 for separate Mesh objects)
+</code></pre>
+
+  <h3>Optimization Checklist</h3>
+
+  <div class="step-cards">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Audit draw calls first</strong>
+        <p>Log <code>renderer.info.render.calls</code>. If over 200, draw call reduction should be your first move — not polygon reduction.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Use InstancedMesh for repeated objects</strong>
+        <p>Trees, rocks, coins, bullets, particles — anything rendered multiple times. One InstancedMesh per geometry+material pair.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Merge static geometry</strong>
+        <p>Combine floor tiles, walls, and terrain chunks using <code>mergeGeometries()</code> from <code>three/addons/utils/BufferGeometryUtils.js</code>.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Compress assets</strong>
+        <p>Run GLB files through Draco compression. Use WebP or KTX2 for textures. A 10 MB GLB can compress to under 2 MB.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <strong>Lazy-load distant objects</strong>
+        <p>Only add a model to the scene when the camera is within a threshold distance. Remove it when the camera moves away.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <strong>Check frustum culling is on</strong>
+        <p>Three.js skips objects outside the camera frustum by default (<code>mesh.frustumCulled = true</code>). Never set it to false unless you have a specific reason.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Quick Check</h3>
+
+  <div class="quiz-card"
+    data-correct="0"
+    data-explanation-0="Correct! InstancedMesh renders N copies of one geometry+material in a single draw call. Draw calls are the primary bottleneck for web 3D performance."
+    data-explanation-1="Reducing polygon count can help, but draw calls are typically the bigger bottleneck. 500 low-poly objects still costs 500 draw calls."
+    data-explanation-2="Texture compression reduces file size and VRAM, but does not directly affect draw call count, which is the primary bottleneck described."
+    data-explanation-3="LOD helps polygon count at distance, but each LOD level object still costs a draw call. InstancedMesh is the correct answer for this scenario.">
+    <p class="quiz-question">A forest scene has 500 identical tree meshes at 60 FPS on desktop but 8 FPS on mobile. What is the single most effective optimization?</p>
+    <div class="quiz-options">
+      <button class="quiz-option">Replace all 500 Mesh objects with one InstancedMesh</button>
+      <button class="quiz-option">Reduce each tree from 5,000 to 1,000 polygons</button>
+      <button class="quiz-option">Compress all tree textures from PNG to WebP</button>
+      <button class="quiz-option">Add LOD so distant trees use fewer polygons</button>
+    </div>
+  </div>
+
+</section>

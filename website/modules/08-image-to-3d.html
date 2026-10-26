@@ -1,0 +1,117 @@
+<section class="module" id="module-8">
+  <div class="module-inner">
+
+    <h2>Image-to-3D AI Tools</h2>
+    <p>Text-to-3D is powerful, but sometimes you have a real product photo and need a 3D version of it. Three fundamentally different technologies tackle this problem - and each has a different set of trade-offs for web use.</p>
+
+    <h3>Three Approaches</h3>
+
+    <div class="callout-accent">
+      <strong>Photogrammetry</strong> - Takes 30-200 photos of a real object from all angles and reconstructs geometry by matching features across images. Tools: Polycam (mobile), Metashape, RealityCapture. Produces the most accurate results but requires many photos and generates very dense meshes.
+    </div>
+
+    <div class="callout-info">
+      <strong>NeRF (Neural Radiance Field)</strong> - You walk around an object with your phone recording a video. A neural network learns to predict color and opacity at any point in 3D space from that footage. Luma AI is the most accessible NeRF capture tool. Results are photorealistic but the mesh conversion step is imperfect.
+    </div>
+
+    <div class="callout-accent">
+      <strong>Diffusion-based (AI generative)</strong> - You supply one or a few photos. The AI infers the unseen sides using a diffusion model trained on millions of 3D objects. Tools: Meshy.ai, CSM, Stable Zero123. Fast (under 2 minutes), outputs a clean GLB, but the back of the model is an educated guess.
+    </div>
+
+    <h3>Tool Comparison</h3>
+
+    <table style="width:100%;border-collapse:collapse;font-size:0.875rem;margin-bottom:20px;">
+      <thead>
+        <tr>
+          <th style="border-bottom:2px solid var(--border);padding:8px 12px;text-align:left;">Tool</th>
+          <th style="border-bottom:2px solid var(--border);padding:8px 12px;text-align:left;">Technique</th>
+          <th style="border-bottom:2px solid var(--border);padding:8px 12px;text-align:left;">Input</th>
+          <th style="border-bottom:2px solid var(--border);padding:8px 12px;text-align:left;">Web-ready?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">Meshy.ai</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">Diffusion</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">1-4 photos</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">Yes - GLB out</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">Luma AI</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">NeRF</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">Video / 30+ photos</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">After cleanup</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">Polycam</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">Photogrammetry</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">30+ photos (mobile)</td>
+          <td style="padding:8px 12px;border-bottom:1px solid var(--border);">After decimation</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px;">CSM</td>
+          <td style="padding:8px 12px;">Diffusion</td>
+          <td style="padding:8px 12px;">1-4 photos</td>
+          <td style="padding:8px 12px;">Yes - GLB out</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>The Cleanup Workflow</h3>
+    <p>Even AI-generated GLBs sometimes need cleanup before they're production-ready. Here's the fast path:</p>
+
+    <div class="step-card">
+      <span class="step-number">1</span>
+      <div>Check at <a href="https://gltf.report/" target="_blank" rel="noopener">gltf.report</a> - triangle count should be under 100k, file size under 3 MB for a web hero.</div>
+    </div>
+    <div class="step-card">
+      <span class="step-number">2</span>
+      <div>If too dense, open in Blender, select the mesh, add a <strong>Decimate modifier</strong> at 0.2-0.5 ratio, and re-export as GLB.</div>
+    </div>
+    <div class="step-card">
+      <span class="step-number">3</span>
+      <div>Check for inverted normals (dark patches on the model) in Blender's Edit Mode - select all and <strong>Mesh &gt; Normals &gt; Recalculate Outside</strong>.</div>
+    </div>
+    <div class="step-card">
+      <span class="step-number">4</span>
+      <div>Apply Draco compression with <code>npx gltf-pipeline -i model.glb -o model-compressed.glb -d</code> for 60-80% file size reduction.</div>
+    </div>
+
+    <h3>Quick Knowledge Check</h3>
+
+    <div class="quiz-card"
+         data-correct="2"
+         data-explanation-0="NeRF produces a radiance field representation, not a traditional polygon mesh directly. It needs a mesh conversion step before you can load it in Three.js."
+         data-explanation-1="Photogrammetry produces very dense meshes (often millions of polygons) that require significant decimation before web use."
+         data-explanation-2="Correct! Diffusion-based tools like Meshy.ai produce a clean, low-polygon GLB directly - no mesh conversion or heavy decimation required. It is the fastest path to a web-ready asset."
+         data-explanation-3="NeRF from Luma requires mesh extraction and cleanup, so it is not the fastest route.">
+      <p class="quiz-q">You need a web-ready GLB of a product in under 5 minutes, starting from a single product photo. Which approach is fastest?</p>
+      <div class="quiz-opts">
+        <button class="quiz-option">NeRF capture with Luma AI</button>
+        <button class="quiz-option">Photogrammetry with Polycam</button>
+        <button class="quiz-option">Diffusion-based tool like Meshy.ai image-to-3D</button>
+        <button class="quiz-option">NeRF with manual mesh extraction</button>
+      </div>
+    </div>
+
+    <div class="quiz-card"
+         data-correct="3"
+         data-explanation-0="Diffusion models are trained to infer unseen views - they do not guarantee geometric accuracy. For architecture the back may differ significantly from the real building."
+         data-explanation-1="Fewer photos reduces overlap and feature matching quality, leading to worse geometry reconstruction."
+         data-explanation-2="Photogrammetry excels at accurate geometry but produces very dense meshes - not low-poly output."
+         data-explanation-3="Correct! Photogrammetry captures real geometry from many photos and produces the most dimensionally accurate result. It is the right choice when fidelity to the real-world object matters most.">
+      <p class="quiz-q">An architect needs a 3D model of a physical building model that must be dimensionally accurate. Which technique is most appropriate?</p>
+      <div class="quiz-opts">
+        <button class="quiz-option">Diffusion-based (Meshy.ai) from a single photo</button>
+        <button class="quiz-option">NeRF with only 5 photos for speed</button>
+        <button class="quiz-option">Photogrammetry - it outputs low-poly meshes</button>
+        <button class="quiz-option">Photogrammetry with many overlapping photos</button>
+      </div>
+    </div>
+
+    <div class="callout-warning">
+      <strong>Diffusion models hallucinate the back:</strong> If your product has unique, non-symmetric back details (a label, a port, an embossed logo), a diffusion model will invent something plausible but wrong. In those cases use photogrammetry or photograph all angles and do a multi-view input.
+    </div>
+
+  </div>
+</section>

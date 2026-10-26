@@ -1,0 +1,168 @@
+<section class="module" id="module-17">
+
+  <div class="callout-accent">
+    <span class="callout-icon">✨</span>
+    <div class="callout-content">
+      <strong>Day 17 — GLSL Shaders: Visual Magic</strong>
+      Shaders run on the GPU, not the CPU. They are the reason modern 3D looks so good. Today you write your first vertex and fragment shader pair.
+    </div>
+  </div>
+
+  <h3>Two Programs, One Frame</h3>
+  <p>Every WebGL draw call runs two small programs on the GPU:</p>
+
+  <div class="callout-info">
+    <span class="callout-icon">📍</span>
+    <div class="callout-content">
+      <strong>Vertex shader</strong> — runs once per vertex. Outputs <code>gl_Position</code> (clip-space coordinate). You can displace geometry here (waves, ripples, wind).<br><br>
+      <strong>Fragment shader</strong> — runs once per pixel. Outputs <code>gl_FragColor</code> (RGBA color). You control every pixel's appearance here.
+    </div>
+  </div>
+
+  <h3>GLSL Syntax at a Glance</h3>
+
+<pre><code class="language-glsl">// Core types
+float f = 1.0;              // always use decimal point
+vec2  uv    = vec2(0.5, 0.5);
+vec3  color = vec3(1.0, 0.0, 0.0);   // red
+vec4  rgba  = vec4(color, 1.0);       // add alpha channel
+
+// Swizzling — access components by name
+vec2 xy = rgba.xy;    // first two components
+vec3 rgb = rgba.rgb;  // same as vec3(rgba.r, rgba.g, rgba.b)
+
+// Built-in functions
+float t = sin(u_time);           // oscillates -1 to 1
+float f = fract(x * 5.0);       // fractional part — repeating patterns
+vec3  c = mix(colorA, colorB, t); // linear interpolation
+float v = clamp(x, 0.0, 1.0);   // constrain to [0, 1]
+</code></pre>
+
+  <div class="callout-info">
+    <span class="callout-icon">🔗</span>
+    <div class="callout-content">
+      <strong>Uniforms</strong> are JS values sent to both shaders — same across all vertices/pixels (time, resolution, mouse position).<br>
+      <strong>Varyings</strong> are computed in the vertex shader and interpolated to the fragment shader — the UV coordinate is a classic example.
+    </div>
+  </div>
+
+  <h3>Complete Animated Wave ShaderMaterial</h3>
+
+<pre><code class="language-js">import * as THREE from 'three';
+
+const material = new THREE.ShaderMaterial({
+  uniforms: {
+    u_time: { value: 0.0 }
+  },
+  vertexShader: /* glsl */ `
+    uniform float u_time;
+    varying vec2  v_uv;
+
+    void main() {
+      v_uv = uv;
+      vec3 pos = position;
+
+      // Displace Z to create wave
+      pos.z += sin(pos.x * 3.0 + u_time)       * 0.15;
+      pos.z += sin(pos.y * 2.0 + u_time * 0.7) * 0.15;
+
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+    }
+  `,
+  fragmentShader: /* glsl */ `
+    uniform float u_time;
+    varying vec2  v_uv;
+
+    void main() {
+      vec3 teal   = vec3(0.05, 0.58, 0.53);
+      vec3 orange = vec3(0.90, 0.40, 0.10);
+
+      float wave = sin(v_uv.x * 6.28 + u_time) * 0.5 + 0.5;
+      wave = mix(wave,
+                 sin(v_uv.y * 6.28 - u_time * 0.6) * 0.5 + 0.5,
+                 0.5);
+
+      gl_FragColor = vec4(mix(teal, orange, wave), 1.0);
+    }
+  `
+});
+
+// Geometry needs segments for the wave displacement to look smooth
+const geometry = new THREE.PlaneGeometry(4, 4, 32, 32);
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+
+// Update time every frame
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  material.uniforms.u_time.value = clock.getElapsedTime();
+  renderer.render(scene, camera);
+}
+animate();
+</code></pre>
+
+  <h3>Same Shader in React Three Fiber</h3>
+
+<pre><code class="language-js">import { shaderMaterial } from '@react-three/drei';
+import { extend, useFrame } from '@react-three/fiber';
+import { useRef } from 'react';
+
+const WaveMaterial = shaderMaterial(
+  { u_time: 0 },
+  // vertex
+  `uniform float u_time; varying vec2 v_uv;
+   void main() {
+     v_uv = uv;
+     vec3 pos = position;
+     pos.z += sin(pos.x * 3.0 + u_time) * 0.15;
+     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+   }`,
+  // fragment
+  `uniform float u_time; varying vec2 v_uv;
+   void main() {
+     float wave = sin(v_uv.x * 6.28 + u_time) * 0.5 + 0.5;
+     gl_FragColor = vec4(mix(vec3(0.05,0.58,0.53), vec3(0.9,0.4,0.1), wave), 1.0);
+   }`
+);
+extend({ WaveMaterial });
+
+function WavePlane() {
+  const mat = useRef();
+  useFrame(({ clock }) => { if (mat.current) mat.current.u_time = clock.getElapsedTime(); });
+  return (
+    &lt;mesh&gt;
+      &lt;planeGeometry args={[4, 4, 32, 32]} /&gt;
+      &lt;waveMaterial ref={mat} /&gt;
+    &lt;/mesh&gt;
+  );
+}
+</code></pre>
+
+  <div class="callout-warning">
+    <span class="callout-icon">💡</span>
+    <div class="callout-content">
+      <strong>AI can write shaders for you.</strong>
+      Prompt: "Write a Three.js ShaderMaterial that creates a Voronoi noise effect with animated cells. Use a u_time uniform."
+      Test the result on <a href="http://glslsandbox.com" target="_blank" rel="noopener">glslsandbox.com</a> before adding it to your scene.
+    </div>
+  </div>
+
+  <h3>Quick Check</h3>
+
+  <div class="quiz-card"
+    data-correct="1"
+    data-explanation-0="gl_Position sets the position of a vertex in clip space. It is an output of the vertex shader, not the fragment shader."
+    data-explanation-1="Correct! gl_FragColor is the built-in output variable in the fragment shader that sets the final RGBA color of each pixel. Values range from 0.0 to 1.0."
+    data-explanation-2="Uniforms are declared with the 'uniform' keyword, not gl_FragColor."
+    data-explanation-3="Textures are created with sampler2D and texture2D(). gl_FragColor is for the output color, not texture creation.">
+    <p class="quiz-question">In a GLSL fragment shader, what is the purpose of <code>gl_FragColor</code>?</p>
+    <div class="quiz-options">
+      <button class="quiz-option">Sets the 3D position of a vertex in clip space</button>
+      <button class="quiz-option">Sets the final RGBA output color of each pixel being rendered</button>
+      <button class="quiz-option">Declares a uniform variable passed in from JavaScript</button>
+      <button class="quiz-option">Creates and samples a texture on the mesh surface</button>
+    </div>
+  </div>
+
+</section>

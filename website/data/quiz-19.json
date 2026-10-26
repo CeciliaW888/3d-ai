@@ -1,0 +1,66 @@
+{
+  "day": 19,
+  "title": "Blender to Web: Export Pipeline",
+  "questions": [
+    {
+      "question": "What does enabling 'Apply Transformations' do when exporting a GLB from Blender?",
+      "options": [
+        "Bakes any pending scale, rotation, and location transforms into the mesh data",
+        "Converts the model from Z-up to Y-up axis orientation",
+        "Embeds all linked textures into the binary file",
+        "Applies Draco compression to the mesh geometry"
+      ],
+      "correct": 0,
+      "answer": 0,
+      "explanation": "Apply Transformations bakes any pending transform values into the mesh so the model arrives in Three.js with clean, applied transforms rather than unexpected scale factors."
+    },
+    {
+      "question": "You run `npx gltf-transform inspect input.glb` and see a 12 MB file with a 4096x4096 texture. What is the best next step?",
+      "options": [
+        "Reload the model in Three.js - the file size is fine for web",
+        "Resize the texture to 1024x1024 with gltf-transform before optimizing",
+        "Switch from GLB to GLTF format to reduce size",
+        "Increase the Draco compression ratio in Blender's export settings"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "A 4096x4096 texture is oversized for most web assets. Running `npx gltf-transform resize --width 1024 --height 1024` before optimizing will dramatically reduce file size."
+    },
+    {
+      "question": "Which Blender modifier is most useful for reducing polygon count before web export?",
+      "options": [
+        "Subdivision Surface - adds more geometry for smoother shapes",
+        "Mirror - duplicates geometry across an axis",
+        "Solidify - adds thickness to flat surfaces",
+        "Decimate - reduces face count while preserving overall shape"
+      ],
+      "correct": 3,
+      "answer": 3,
+      "explanation": "The Decimate modifier reduces polygon count while trying to preserve the overall shape. Setting the Ratio to 0.3-0.5 can bring a high-poly AI mesh down to web-friendly levels."
+    },
+    {
+      "question": "What is the key reason to choose GLB format over GLTF+Bin when exporting for the web?",
+      "options": [
+        "GLB supports more material types than GLTF",
+        "GLB files are automatically Draco-compressed on export",
+        "GLB packs all geometry, textures, and materials into a single binary file",
+        "GLB is faster to export from Blender than other formats"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "GLB is the binary form of GLTF that packs everything (geometry, materials, textures) into a single file. GLTF+Bin splits data across multiple files, making web deployment more complex."
+    },
+    {
+      "question": "A model loads in Three.js but appears lying on its back instead of standing upright. What is the most likely fix?",
+      "options": [
+        "Add DRACOLoader - the model failed to decompress correctly",
+        "Enable Draco in the Blender export settings and re-export",
+        "Apply the model scale to 0.01 in Three.js code",
+        "Rotate the model -90 degrees on the X axis in Three.js or fix the axis in Blender before export"
+      ],
+      "correct": 3,
+      "answer": 3,
+      "explanation": "Blender uses Z as the up axis; GLTF and Three.js use Y. Even though the exporter usually handles this, models can arrive rotated. The fix is model.rotation.x = -Math.PI / 2 in Three.js, or applying the correction in Blender."
+    }
+  ]
+}

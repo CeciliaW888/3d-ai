@@ -1,0 +1,78 @@
+{
+  "day": 5,
+  "title": "React Three Fiber: 3D in React",
+  "questions": [
+    {
+      "question": "What React Three Fiber component creates the WebGL canvas, renderer, and default camera?",
+      "options": [
+        "<Scene>",
+        "<Canvas>",
+        "<WebGL>",
+        "<Renderer>"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "<Canvas> is the root component in R3F. It handles creating the WebGLRenderer, a default PerspectiveCamera, and the animation loop — everything that Three.js imperative code would set up manually."
+    },
+    {
+      "question": "In React Three Fiber, how do you pass constructor arguments to a Three.js class like BoxGeometry(1, 2, 1)?",
+      "options": [
+        "width={1} height={2} depth={1}",
+        "args={[1, 2, 1]}",
+        "size={[1, 2, 1]}",
+        "params={[1, 2, 1]}"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "R3F uses the `args` prop to pass constructor arguments as an array. <boxGeometry args={[1, 2, 1]} /> is equivalent to new THREE.BoxGeometry(1, 2, 1)."
+    },
+    {
+      "question": "Which R3F hook runs a function on every animation frame?",
+      "options": [
+        "useEffect",
+        "useAnimation",
+        "useFrame",
+        "useTick"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "useFrame runs inside R3F's render loop, calling your callback before each frame. The callback receives (state, delta) — delta is seconds since last frame, useful for framerate-independent animations."
+    },
+    {
+      "question": "Why should model-loading components using useGLTF be wrapped in <Suspense>?",
+      "options": [
+        "Suspense is required by React for all hooks",
+        "useGLTF throws a Promise while loading, which Suspense catches to show a fallback instead of crashing",
+        "Suspense compresses the GLB file to load faster",
+        "Without Suspense, useGLTF returns null"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "useGLTF (and useLoader) use React's Suspense mechanism. They throw a Promise during loading, which Suspense catches and uses to show a fallback component. When loading completes the component renders normally."
+    },
+    {
+      "question": "What does <Environment preset=\"city\"> from @react-three/drei do?",
+      "options": [
+        "Renders a 3D city skyline background",
+        "Adds ambient and directional lights to the scene",
+        "Sets an HDR environment map that provides realistic reflections and lighting",
+        "Loads a city-themed GLB model"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "<Environment> applies an HDR environment map that wraps the scene. It provides image-based lighting (IBL) — reflections and ambient color come from the environment, eliminating the need for explicit light components."
+    },
+    {
+      "question": "In useFrame, why should you use `delta` for rotation speed instead of a fixed number?",
+      "options": [
+        "delta makes the animation look more random and organic",
+        "delta is required by the R3F type system",
+        "Using delta makes rotation speed consistent regardless of frame rate — 30fps or 144fps gives the same perceived speed",
+        "Fixed numbers cause memory leaks"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "delta is seconds since the last frame (about 0.016 at 60fps). Multiplying by delta makes movement per second constant: mesh.rotation.y += 1.0 * delta always rotates 1 radian per second regardless of frame rate."
+    }
+  ]
+}

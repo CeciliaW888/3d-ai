@@ -1,0 +1,151 @@
+<section class="module" id="module-6">
+  <h2>Day 6: Spline: No-Code 3D for Web</h2>
+
+  <div class="callout-accent">
+    <strong>The pitch:</strong> Spline is a browser-based 3D editor designed to output interactive web embeds. Design visually, click Export, paste one snippet into your HTML or React app. No Three.js, no build config, no model files needed for basic embeds.
+  </div>
+
+  <h3>What Makes Spline Different?</h3>
+  <p>
+    Blender, Cinema 4D, and Maya target film and game production — they export meshes you then load into code.
+    Spline targets web developers: the output is an embed, not a file.
+    The entire workflow lives in the browser and ends with a copy-paste.
+    For interactive hero sections, product showcases, and UI decorations, Spline is often the fastest tool in the 3D web stack.
+  </p>
+
+  <h3>The Spline Editor</h3>
+
+  <div class="step-cards">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Viewport</strong>
+        <p>The central 3D canvas. Orbit with alt+drag, zoom with scroll wheel. Hit Play (top-right) to preview interactions.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Outliner (left panel)</strong>
+        <p>Layer tree of all scene objects. Click to select, drag to rearrange, right-click for group/hide options.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Inspector (right panel)</strong>
+        <p>Transform, material, physics, and events for the selected object. This is where most design work happens.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Events tab</strong>
+        <p>Add no-code interactions: pick a trigger (On Hover, On Click) and an action (Scale, Rotate, Change Color). Zero JavaScript required.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Embedding in Plain HTML</h3>
+
+  <p>
+    Go to Export (top-right) and choose <strong>Spline Viewer</strong>.
+    Copy the scene URL from the export panel, then use this snippet:
+  </p>
+
+  <pre><code class="language-html">&lt;!-- Load the Spline Viewer web component --&gt;
+&lt;script type="module"
+  src="https://unpkg.com/@splinetool/viewer@1.0.0/build/spline-viewer.js"&gt;
+&lt;/script&gt;
+
+&lt;!-- Embed the scene --&gt;
+&lt;spline-viewer
+  url="https://prod.spline.design/YOUR-SCENE-ID/scene.splinecode"
+  loading="lazy"&gt;
+&lt;/spline-viewer&gt;</code></pre>
+
+  <div class="callout-info">
+    <strong>Add loading="lazy"</strong> to the <code>&lt;spline-viewer&gt;</code> tag. This defers loading the scene until the user scrolls near it, saving bandwidth on page load.
+  </div>
+
+  <h3>Embedding in React</h3>
+
+  <pre><code class="language-bash">npm install @splinetool/react-spline</code></pre>
+
+  <pre><code class="language-jsx">import Spline from '@splinetool/react-spline';
+
+export default function HeroSection() {
+  return (
+    &lt;section style={{ width: '100%', height: '100vh' }}&gt;
+      &lt;Spline
+        scene="https://prod.spline.design/YOUR-SCENE-ID/scene.splinecode"
+        style={{ width: '100%', height: '100%' }}
+      /&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+
+  <h3>Performance Checklist</h3>
+
+  <div class="callout-warning">
+    <strong>Watch your polygon count.</strong> Every triangle costs network bandwidth and GPU time. Mobile GPUs are 10-20x weaker than desktop. Use View &gt; Statistics in Spline to check — aim for under 50k triangles for a hero section.
+  </div>
+
+  <p>
+    Three quick performance wins for Spline embeds:
+  </p>
+  <p>
+    <strong>1. Reduce subdivisions</strong> — high-subdivision spheres and tori are the most common polygon culprits.
+    Lower the Subdivisions setting in the Inspector to 16 or 24 instead of the default 64.
+  </p>
+  <p>
+    <strong>2. Keep textures at 512x512 or 1024x1024</strong> — each texture is fetched from CDN.
+    Large textures are the biggest cause of slow Spline embeds on mobile.
+  </p>
+  <p>
+    <strong>3. Limit object count to 30-50</strong> — each object is a draw call.
+    Group simple objects using Spline's Group feature to reduce draw call overhead.
+  </p>
+
+  <div class="quiz-card" data-correct="3"
+    data-explanation-0="Spline scenes load from CDN and performance varies by device — they are not inherently faster than R3F."
+    data-explanation-1="The key advantage is the no-code workflow and instant embed — not just geometry types."
+    data-explanation-2="Spline is not open source."
+    data-explanation-3="Correct! Spline's main advantage is the design-to-embed workflow — no npm install, no Three.js knowledge, no build tooling needed for a basic embed.">
+    <p class="quiz-question">What is the primary advantage of Spline over React Three Fiber for a marketing hero section?</p>
+    <div class="quiz-options">
+      <button class="quiz-option">Spline scenes run faster on all devices</button>
+      <button class="quiz-option">Spline has more geometry types than Three.js</button>
+      <button class="quiz-option">Spline is open source</button>
+      <button class="quiz-option">No-code design exports to a one-line embed with no build config required</button>
+    </div>
+  </div>
+
+  <div class="quiz-card" data-correct="0"
+    data-explanation-0="Correct! The Spline Viewer export generates a &lt;spline-viewer&gt; Custom Element (web component) that renders the scene using WebGL."
+    data-explanation-1="Spline does not use an iframe for its viewer embed — it uses a web component."
+    data-explanation-2="&lt;canvas id='spline'&gt; is just a plain canvas — Spline's viewer component handles the canvas internally."
+    data-explanation-3="&lt;model-viewer&gt; is Google's web component for GLTF files — it is a different tool with no connection to Spline.">
+    <p class="quiz-question">Which HTML element does the Spline Viewer export generate?</p>
+    <div class="quiz-options">
+      <button class="quiz-option">&lt;spline-viewer url="…"&gt;</button>
+      <button class="quiz-option">&lt;iframe src="…"&gt;</button>
+      <button class="quiz-option">&lt;canvas id="spline"&gt;</button>
+      <button class="quiz-option">&lt;model-viewer src="…"&gt;</button>
+    </div>
+  </div>
+
+  <div class="quiz-card" data-correct="1"
+    data-explanation-0="That is the CDN embed package — @splinetool/viewer is for the &lt;spline-viewer&gt; web component in plain HTML."
+    data-explanation-1="Correct! @splinetool/react-spline is the official React package. Install it and use &lt;Spline scene='your-url' /&gt;."
+    data-explanation-2="react-spline-viewer is not a real package — always check npmjs.com before installing unknown package names."
+    data-explanation-3="@react-three/spline is not a real package — that naming convention belongs to the react-three ecosystem, not Spline.">
+    <p class="quiz-question">Which npm package do you install to embed a Spline scene in a React app?</p>
+    <div class="quiz-options">
+      <button class="quiz-option">@splinetool/viewer</button>
+      <button class="quiz-option">@splinetool/react-spline</button>
+      <button class="quiz-option">react-spline-viewer</button>
+      <button class="quiz-option">@react-three/spline</button>
+    </div>
+  </div>
+</section>

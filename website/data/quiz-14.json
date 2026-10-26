@@ -1,0 +1,66 @@
+{
+  "day": 14,
+  "title": "Week 2 Capstone: 3D Product Configurator",
+  "questions": [
+    {
+      "question": "What does the useGLTF hook return that you use to display a loaded 3D model?",
+      "options": [
+        "A raw ArrayBuffer of the binary GLB file",
+        "A Three.js Group called 'scene' that contains the model's meshes and materials",
+        "A React ref that must be attached to a <mesh> element",
+        "A list of texture URLs that must be loaded separately"
+      ],
+      "correct": 1,
+      "explanation": "useGLTF returns an object with a 'scene' property \u2014 a Three.js Group containing the entire model hierarchy. You render it in R3F using <primitive object={scene} />.",
+      "answer": 1
+    },
+    {
+      "question": "Why should you clone a material before modifying it in a useGLTF model?",
+      "options": [
+        "useGLTF does not support material access without cloning",
+        "Cloning prevents the browser from garbage-collecting the material",
+        "useGLTF caches models globally, so modifying the original mutates it for all components using the same model",
+        "React Three Fiber requires immutable materials for its reconciler to work"
+      ],
+      "correct": 2,
+      "explanation": "useGLTF caches the loaded model across all components. If you change the original material's color, every component sharing that cached model will change. Cloning gives each component its own copy.",
+      "answer": 2
+    },
+    {
+      "question": "Which React feature shows a placeholder while a 3D model is still loading?",
+      "options": [
+        "React.Suspense with a fallback prop",
+        "useEffect with a loading state variable",
+        "React.lazy with a dynamic import",
+        "React.memo with a comparison function"
+      ],
+      "correct": 0,
+      "explanation": "React.Suspense catches the promise thrown by useGLTF while the file downloads. The 'fallback' prop specifies what to render in the meantime \u2014 typically a simple placeholder mesh.",
+      "answer": 0
+    },
+    {
+      "question": "The OrbitControls component has 'enableDamping' enabled. What effect does this have?",
+      "options": [
+        "It prevents the camera from going below the ground plane",
+        "It limits the maximum zoom distance to prevent clipping",
+        "It locks the camera's vertical rotation to a fixed range",
+        "It adds a smooth deceleration so the camera glides to a stop rather than stopping abruptly"
+      ],
+      "correct": 3,
+      "explanation": "enableDamping adds inertia to the orbit controls. When the user stops dragging, the camera continues to rotate and gradually slows to a stop, creating a polished feel. It requires dampingFactor to be set (e.g. 0.05).",
+      "answer": 3
+    },
+    {
+      "question": "Where should a GLB model file be placed in a Vite project so it is served as a static asset?",
+      "options": [
+        "In the src/ folder alongside your React components",
+        "In the node_modules/ folder under your package name",
+        "In the public/ folder, which Vite copies as-is to the build output",
+        "In a models/ folder at the project root alongside package.json"
+      ],
+      "correct": 2,
+      "explanation": "Files in the Vite public/ folder are copied verbatim to the dist/ output. This is the correct place for binary assets like GLB files that should not be processed by the bundler.",
+      "answer": 2
+    }
+  ]
+}

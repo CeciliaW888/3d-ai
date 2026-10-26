@@ -1,0 +1,88 @@
+<section class="module" id="module-7">
+  <div class="module-inner">
+
+    <h2>Week 1 Capstone: AI 3D Hero Section</h2>
+    <p>You have all the building blocks. Today you ship something real: a landing page hero with an AI-generated 3D model embedded via Three.js. This is the kind of section that makes visitors stop scrolling.</p>
+
+    <div class="callout-accent">
+      <strong>Project goal:</strong> Generate a 3D object with Meshy.ai, download the GLB, and embed it in a complete HTML file with a floating animation and responsive CSS.
+    </div>
+
+    <h3>The 5-Step Build</h3>
+
+    <div class="step-card">
+      <span class="step-number">1</span>
+      <div>
+        <strong>Generate on Meshy.ai</strong>
+        <p>Use a short, concrete prompt: "ceramic coffee mug, product photography style" or "crystal gem, blue tones". Simple shapes with clear surfaces generate the cleanest results. Download the GLB.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-number">2</span>
+      <div>
+        <strong>Set up the scene</strong>
+        <p>You need a <code>WebGLRenderer</code>, a <code>PerspectiveCamera</code>, a <code>Scene</code>, and two lights. Two lights is usually enough: an <code>AmbientLight</code> (soft fill) and a <code>DirectionalLight</code> (key light for shading).</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-number">3</span>
+      <div>
+        <strong>Load the GLB with GLTFLoader</strong>
+        <p>After loading, compute a bounding box, then center and scale the model to fit in a 2-unit cube. This is essential because AI-generated models have unpredictable origin points and sizes.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-number">4</span>
+      <div>
+        <strong>Add animation</strong>
+        <p>Two lines of code in the render loop create a polished floating effect:</p>
+        <pre><code class="language-js">model.rotation.y += 0.003;
+model.position.y = Math.sin(t * 0.8) * 0.08;</code></pre>
+        <p>The Y rotation gives it a slow spin. The sine wave makes it float up and down.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <span class="step-number">5</span>
+      <div>
+        <strong>Responsive canvas + loading state</strong>
+        <p>Size the canvas with CSS (<code>width: min(480px, 90vw)</code>) and listen for <code>window.resize</code> to update the renderer. Show a CSS spinner over the canvas until the GLB loads.</p>
+      </div>
+    </div>
+
+    <h3>Performance Rules</h3>
+
+    <div class="callout-warning">
+      <strong>Cap the pixel ratio:</strong> Always call <code>renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))</code>. On Retina screens, rendering at 3x or 4x gives no visible benefit and can triple your GPU load.
+    </div>
+
+    <div class="callout-info">
+      <strong>Target file size:</strong> Keep your GLB under 3 MB for a good first-load experience. Run the file through <a href="https://gltf.report/" target="_blank" rel="noopener">gltf.report</a> to check the triangle count and file size.
+    </div>
+
+    <h3>Quick Knowledge Check</h3>
+
+    <div class="quiz-card"
+         data-correct="1"
+         data-explanation-0="Close - GLTFLoader does load GLBs, but that alone doesn't handle different model sizes and origins. Centering and scaling with a bounding box is also essential."
+         data-explanation-1="Correct! After loading with GLTFLoader you use Box3.setFromObject() to compute the bounding box, extract its center and max dimension, then translate and scale the model to fit your scene."
+         data-explanation-2="OrbitControls handles camera interaction, not model placement. It doesn't affect where the model sits in the scene."
+         data-explanation-3="DRACO is a compression format - it has nothing to do with centering the model in the scene.">
+      <p class="quiz-q">After loading a GLB with GLTFLoader, the model appears huge and off-center. What is the correct way to fix this?</p>
+      <div class="quiz-opts">
+        <button class="quiz-option">Call GLTFLoader with a scale parameter</button>
+        <button class="quiz-option">Compute a Box3 bounding box, then translate and scale the model</button>
+        <button class="quiz-option">Add OrbitControls - it repositions the model automatically</button>
+        <button class="quiz-option">Enable DRACO decoding</button>
+      </div>
+    </div>
+
+    <div class="callout-info">
+      <strong>Mobile fallback tip:</strong> Add <code>@media (pointer: coarse)</code> CSS to reduce the canvas height on touch devices, saving battery and reducing draw calls on slower mobile GPUs.
+    </div>
+
+  </div>
+</section>

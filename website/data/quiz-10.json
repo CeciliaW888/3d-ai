@@ -1,0 +1,66 @@
+{
+  "day": 10,
+  "title": "AI Animation: Mixamo & Beyond",
+  "questions": [
+    {
+      "question": "What is an armature in the context of 3D skeletal animation?",
+      "options": [
+        "A hierarchy of bones that drives mesh deformation",
+        "A set of keyframe data stored in a GLB file",
+        "The visible mesh surface of a character",
+        "The blend weight between two animation clips"
+      ],
+      "correct": 0,
+      "explanation": "An armature is the invisible skeleton hierarchy made of bones. It is the structure you animate; the mesh follows it through skinning weight assignments.",
+      "answer": 0
+    },
+    {
+      "question": "Why must you pass clock.getDelta() instead of clock.getElapsedTime() to mixer.update()?",
+      "options": [
+        "getElapsedTime() is not available on THREE.Clock",
+        "getDelta() returns milliseconds, which Three.js requires",
+        "getDelta() returns the time since the last call, keeping playback speed consistent across frames",
+        "mixer.update() only accepts integer values"
+      ],
+      "correct": 2,
+      "explanation": "getDelta() returns the seconds since it was last called. Passing delta keeps animation speed tied to real time. Passing elapsedTime (a growing total) would make animations run faster and faster.",
+      "answer": 2
+    },
+    {
+      "question": "In Mixamo's auto-rig workflow, how many body markers must you place before Mixamo generates the rig?",
+      "options": [
+        "Three (head, spine, pelvis)",
+        "Ten (all major joints)",
+        "Seven (head, shoulders, elbows, hips)",
+        "Five (head, chin, wrists, groin, knees)"
+      ],
+      "correct": 3,
+      "explanation": "Mixamo asks you to place five markers \u2014 head top, chin, left and right wrists, groin, and knees \u2014 before its AI generates the full ~65-bone rig.",
+      "answer": 3
+    },
+    {
+      "question": "Which Three.js class is the playback engine you call update(delta) on every frame?",
+      "options": [
+        "AnimationClip",
+        "AnimationMixer",
+        "SkeletonHelper",
+        "AnimationAction"
+      ],
+      "correct": 1,
+      "explanation": "AnimationMixer is the playback engine. You create one per animated model and call mixer.update(delta) inside requestAnimationFrame to advance time through the active clips.",
+      "answer": 1
+    },
+    {
+      "question": "What method do you call to smoothly blend from one AnimationAction to another over a set duration?",
+      "options": [
+        "action.fadeIn(duration)",
+        "mixer.blendTo(action, duration)",
+        "clip.lerpTo(nextClip, duration)",
+        "currentAction.crossFadeTo(nextAction, duration, false)"
+      ],
+      "correct": 3,
+      "explanation": "crossFadeTo is called on the currently playing action. It fades its weight out while fading the target action in over the given duration in seconds.",
+      "answer": 3
+    }
+  ]
+}

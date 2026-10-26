@@ -1,0 +1,66 @@
+{
+  "day": 1,
+  "title": "How 3D Works: Meshes, Materials & Lighting",
+  "questions": [
+    {
+      "question": "What is a mesh in 3D graphics?",
+      "options": [
+        "A collection of pixels forming an image",
+        "A collection of vertices, edges, and faces defining a 3D shape",
+        "A type of texture map for surfaces",
+        "A lighting model for rendering"
+      ],
+      "answer": 1,
+      "correct": 1,
+      "explanation": "A mesh is the 3D wireframe structure made of vertices (points in space), edges (connections between vertices), and faces (polygons) that defines an object's shape."
+    },
+    {
+      "question": "In PBR (Physically Based Rendering), what does the metalness property control?",
+      "options": [
+        "How shiny the surface is",
+        "How heavy the object appears",
+        "Whether the surface behaves like a conductor (metal) or dielectric (plastic/ceramic)",
+        "The thickness of the object's edges"
+      ],
+      "answer": 2,
+      "correct": 2,
+      "explanation": "Metalness (0 to 1) determines whether a surface is a conductor or dielectric. Metals reflect their tint color, while dielectrics (plastic, wood, skin) have white-tinted specular highlights."
+    },
+    {
+      "question": "What is UV mapping in 3D?",
+      "options": [
+        "A type of camera projection for ultraviolet light",
+        "A coordinate system (U=horizontal, V=vertical) for applying 2D textures to 3D surfaces",
+        "A method for computing vertex normals",
+        "A compression format for texture images"
+      ],
+      "answer": 1,
+      "correct": 1,
+      "explanation": "UV mapping flattens a 3D mesh's surface into 2D space using U (horizontal) and V (vertical) coordinates. This tells the renderer which part of a texture image maps to each polygon."
+    },
+    {
+      "question": "Which light type emits parallel rays from a fixed direction, like sunlight?",
+      "options": [
+        "Point light",
+        "Spot light",
+        "Area light",
+        "Directional light"
+      ],
+      "answer": 3,
+      "correct": 3,
+      "explanation": "A directional light emits rays that are perfectly parallel, simulating an infinitely distant source like the sun. Its position in the scene doesn't matter — only its direction."
+    },
+    {
+      "question": "What is a normal map used for?",
+      "options": [
+        "Setting the base color of a surface",
+        "Controlling reflection sharpness",
+        "Faking fine surface detail (bumps, scratches) without adding real geometry",
+        "Adjusting the roughness of a material"
+      ],
+      "answer": 2,
+      "correct": 2,
+      "explanation": "A normal map stores per-pixel surface direction data in an RGB texture. By altering how light hits each pixel, it creates the illusion of bumps, dents, and scratches without any additional polygons."
+    }
+  ]
+}

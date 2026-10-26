@@ -1,0 +1,78 @@
+{
+  "day": 6,
+  "title": "Spline: No-Code 3D for Web",
+  "questions": [
+    {
+      "question": "What is the main advantage of using Spline over React Three Fiber for a marketing hero section?",
+      "options": [
+        "Spline scenes run faster than R3F scenes on all devices",
+        "Spline outputs no-code interactive 3D scenes that embed in HTML with a single script tag — no build config required",
+        "Spline has more geometry types than Three.js",
+        "Spline is open source"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "Spline's core advantage is speed of iteration: design visually, export one embed snippet, paste it in. No Three.js knowledge, no npm packages, no build tooling needed for a basic embed."
+    },
+    {
+      "question": "Which HTML element does the Spline Viewer export generate?",
+      "options": [
+        "<canvas id=\"spline\">",
+        "<iframe src=\"...\">",
+        "<spline-viewer url=\"...\">",
+        "<model-viewer src=\"...\">"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "<spline-viewer> is a Custom Element (web component) provided by the @splinetool/viewer package loaded via a <script type=\"module\"> tag. It renders your scene using WebGL inside a shadow DOM."
+    },
+    {
+      "question": "What does Spline's event system let you do without writing any JavaScript?",
+      "options": [
+        "Load external JSON data into the scene",
+        "Connect to a WebSocket server",
+        "Attach trigger-action pairs to objects — like 'on hover, scale up' — creating interactive 3D UI",
+        "Export the scene as a video"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "Spline's Events panel lets you pair a trigger (On Mouse Hover, On Click, On Scroll) with an action (Scale, Rotate, Move, Change Color, Play Animation) — all configured visually with no code."
+    },
+    {
+      "question": "Why should you keep the triangle count under ~50k for a Spline hero section?",
+      "options": [
+        "Spline has a hard limit of 50k triangles per scene",
+        "High polygon counts increase both file download size and GPU rendering cost, hurting load times and mobile performance",
+        "More triangles make the scene look blurry",
+        "Triangle count affects the event system speed"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "Every triangle is work for both the network (download) and the GPU (render). Mobile GPUs are significantly weaker than desktop. Keeping geometry lean is the single biggest lever for Spline performance."
+    },
+    {
+      "question": "Which npm package do you install to use a Spline scene in a React project?",
+      "options": [
+        "@splinetool/three",
+        "@splinetool/react-spline",
+        "react-spline-viewer",
+        "@react-three/spline"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "The official React package is @splinetool/react-spline. It exports a <Spline> component that takes a `scene` URL prop — the same CDN URL from Spline's export panel."
+    },
+    {
+      "question": "What is the difference between Spline's CDN export and the Build Export option?",
+      "options": [
+        "CDN export is lower quality; Build Export is HD",
+        "CDN export loads the scene from Spline's servers; Build Export downloads a self-contained bundle you can host yourself",
+        "Build Export only works for React, not plain HTML",
+        "They are identical — the name is just a UI label"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "The CDN export points to Spline's infrastructure. Build Export gives you a self-hosted bundle — useful for production to avoid CDN dependency, CORS issues, or Spline service changes."
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+<section class="module" id="module-13" data-module="module-13">
+  <div class="module-header animate-in">
+    <span class="module-tag module-tag--advanced">Advanced</span>
+    <h2 class="module-title">Day 13: AI as Your 3D Coding Partner</h2>
+    <p class="module-subtitle">
+      Use Claude, ChatGPT, and GitHub Copilot to write Three.js and React Three Fiber code faster —
+      and learn how to spot the mistakes they make.
+    </p>
+  </div>
+
+  <!-- Intro callout -->
+  <div class="callout callout-info animate-in">
+    <strong>Today's insight:</strong>
+    AI coding assistants are most useful in 3D when you give them full context up front —
+    your Three.js version, your project setup, and the exact visual outcome you want.
+    Vague prompts produce generic boilerplate; specific prompts produce working scenes.
+  </div>
+
+  <!-- 5 Prompt Templates -->
+  <div class="section-label animate-in">5 Copy-Pasteable Prompt Templates</div>
+
+  <div class="callout callout-accent animate-in">
+    <strong>Template 1 — Basic Three.js scene</strong>
+    <pre><code class="language-text">I'm using Three.js r168 with a Vite + vanilla JS setup.
+Write a complete scene with:
+- A WebGLRenderer that fills the window and resizes correctly
+- A PerspectiveCamera at position (0, 2, 5)
+- An ambient light (intensity 0.5) and a directional light with soft shadows
+- A rotating metallic sphere using MeshStandardMaterial
+- An animation loop using requestAnimationFrame
+Include a resize event listener and dispose cleanup.</code></pre>
+  </div>
+
+  <div class="callout callout-accent animate-in">
+    <strong>Template 2 — React Three Fiber component</strong>
+    <pre><code class="language-text">I'm using React Three Fiber with @react-three/drei.
+Write a self-contained React component called &lt;ProductViewer&gt; that:
+- Loads a GLB file from /models/shoe.glb using useGLTF
+- Shows a Suspense fallback with a spinning placeholder cube
+- Uses OrbitControls (from drei) with damping enabled
+- Adds an Environment preset="city" for lighting
+- Accepts a `color` prop and applies it to the first MeshStandardMaterial
+The component should be exported as default.</code></pre>
+  </div>
+
+  <div class="callout callout-accent animate-in">
+    <strong>Template 3 — GLSL shader</strong>
+    <pre><code class="language-text">I'm writing a Three.js ShaderMaterial.
+Write a vertex and fragment shader pair that creates an animated wave effect.
+The vertex shader should displace Y using sin(position.x * frequency + time) * amplitude.
+The fragment shader should color with a gradient: deep blue at base to white at peaks.
+Include uniforms: time (float), frequency (float), amplitude (float).
+Show how to pass these when creating the ShaderMaterial.</code></pre>
+  </div>
+
+  <div class="callout callout-accent animate-in">
+    <strong>Template 4 — Debugging a black screen</strong>
+    <pre><code class="language-text">My Three.js scene renders a black screen. Here is my full setup code:
+[PASTE CODE HERE]
+I am using Three.js r168 and a Vite dev server.
+What are the three most likely causes for a black screen, and which one matches my code?
+Fix the issue and explain what was wrong.</code></pre>
+  </div>
+
+  <div class="callout callout-accent animate-in">
+    <strong>Template 5 — Performance optimization</strong>
+    <pre><code class="language-text">I have a React Three Fiber scene with [describe your scene].
+It runs at 25 FPS on a mid-range laptop.
+Suggest five specific optimizations to hit 60 FPS.
+For each suggestion, show the before and after code.
+Focus on geometry instancing, draw call reduction, and texture compression.</code></pre>
+  </div>
+
+  <!-- Pitfalls -->
+  <h3 class="section-heading animate-in">Common AI Pitfalls in Three.js</h3>
+
+  <div class="step-cards animate-in">
+    <div class="step-card" data-stagger>
+      <span class="step-number">1</span>
+      <div class="step-content">
+        <strong>Removed APIs</strong>
+        <p>
+          Models trained before r125 may suggest <code>THREE.Geometry</code> (removed) or
+          <code>geometry.faces</code>.
+          Always check <code>THREE.REVISION</code> in the console and the migration guide.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card" data-stagger>
+      <span class="step-number">2</span>
+      <div class="step-content">
+        <strong>Invented methods</strong>
+        <p>
+          AI sometimes generates plausible-sounding but non-existent calls like <code>mesh.setMaterial()</code>.
+          If you get <code>TypeError: x is not a function</code>, check the Three.js docs directly.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card" data-stagger>
+      <span class="step-number">3</span>
+      <div class="step-content">
+        <strong>Wrong import paths</strong>
+        <p>
+          AI may write <code>'three/examples/jsm/controls/OrbitControls'</code> when newer Three.js uses
+          <code>'three/addons/controls/OrbitControls.js'</code>.
+          These differ between Three.js versions.
+        </p>
+      </div>
+    </div>
+
+    <div class="step-card" data-stagger>
+      <span class="step-number">4</span>
+      <div class="step-content">
+        <strong>Stale R3F patterns</strong>
+        <p>
+          React Three Fiber evolves quickly.
+          Old forum posts and AI output may suggest deprecated <code>extend</code> usage or outdated hook signatures.
+          Always verify against the official R3F docs.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warning callout -->
+  <div class="callout callout-warning animate-in">
+    <strong>Always verify AI-generated Three.js code</strong> by checking
+    <code>THREE.REVISION</code> in the console and comparing method names against the
+    official Three.js documentation before committing to a direction.
+  </div>
+
+  <!-- Quiz -->
+  <h3 class="section-heading animate-in">Quick Check</h3>
+
+  <div class="quiz-card animate-in"
+    data-correct="2"
+    data-explanation-0="Knowing the license helps with distribution, but it does not help the AI generate code for your specific setup."
+    data-explanation-1="The scene background color rarely affects which APIs the AI uses."
+    data-explanation-2="Correct! Three.js has significant API changes between versions. Without the version, AI may generate code for r100 using APIs removed in r125+."
+    data-explanation-3="The number of objects affects rendering performance advice, not which API methods the AI suggests."
+  >
+    <p class="quiz-question">When prompting an AI to write Three.js code, which piece of context is most important to include first?</p>
+    <div class="quiz-options">
+      <button class="quiz-option">The Three.js license type you are using</button>
+      <button class="quiz-option">The desired background color of the scene</button>
+      <button class="quiz-option">The Three.js version and project setup (Vite, React, etc.)</button>
+      <button class="quiz-option">The number of objects in your scene</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <!-- Reflection textarea -->
+  <div class="reflection-card animate-in" data-reflection="day13-prompt-practice">
+    <p class="reflection-prompt">
+      Which of the five prompt templates will you use first in your own project?
+      Customize it with your specific needs below:
+    </p>
+    <textarea rows="4" placeholder="Paste and edit your customized prompt here..."></textarea>
+    <button class="save-reflection btn btn--secondary">Save note</button>
+  </div>
+</section>

@@ -1,0 +1,66 @@
+{
+  "day": 13,
+  "title": "AI as Your 3D Coding Partner",
+  "questions": [
+    {
+      "question": "Which of the following should always be included at the start of a prompt asking an AI to write Three.js code?",
+      "options": [
+        "The color scheme of your website",
+        "Your Three.js version and project framework (e.g. Vite, React)",
+        "The number of lights in your scene",
+        "Whether you are on macOS or Windows"
+      ],
+      "correct": 1,
+      "explanation": "Three.js has breaking changes between major releases. Without the version and framework context, the AI may generate code using removed APIs or wrong import paths.",
+      "answer": 1
+    },
+    {
+      "question": "You run an AI-generated Three.js snippet and get 'TypeError: mesh.setMaterial is not a function'. What is the most likely cause?",
+      "options": [
+        "You forgot to import THREE from 'three'",
+        "The mesh has not been added to the scene yet",
+        "The AI hallucinated a method that does not exist in Three.js",
+        "setMaterial requires a Loader instance as its first argument"
+      ],
+      "correct": 2,
+      "explanation": "AI models sometimes generate plausible-sounding but non-existent method names. setMaterial() does not exist in Three.js \u2014 material is assigned via mesh.material = ... instead.",
+      "answer": 2
+    },
+    {
+      "question": "What is the advantage of asking an AI to 'explain each step with inline comments' alongside the code it generates?",
+      "options": [
+        "It helps you catch hallucinations by verifying the AI's stated reasoning against the docs",
+        "It makes the generated code run faster at runtime",
+        "It reduces the file size of the output by removing unused imports",
+        "It automatically adds TypeScript types to the generated code"
+      ],
+      "correct": 0,
+      "explanation": "When an AI explains its reasoning step by step, you can compare each explanation against the Three.js docs. Incorrect reasoning often reveals an incorrect API call before you even run the code.",
+      "answer": 0
+    },
+    {
+      "question": "Which Three.js import path is correct for three.js r168 and newer?",
+      "options": [
+        "'three/examples/jsm/controls/OrbitControls'",
+        "'three/src/controls/OrbitControls.js'",
+        "'three/controls/OrbitControls.js'",
+        "'three/addons/controls/OrbitControls.js'"
+      ],
+      "correct": 3,
+      "explanation": "Three.js r152+ reorganized addons under 'three/addons/'. AI trained on older examples may suggest the legacy 'three/examples/jsm/' path, which still works but is deprecated in favor of the new path.",
+      "answer": 3
+    },
+    {
+      "question": "When iterating on AI-generated 3D code, why is it better to continue in the same conversation thread rather than starting a new chat?",
+      "options": [
+        "New chats charge extra API credits for Three.js-related prompts",
+        "The AI can see the previous code and conversation, making corrections more accurate and consistent",
+        "Starting a new chat resets the Three.js version context to the latest release",
+        "The AI forgets your username and project name when you start a new chat"
+      ],
+      "correct": 1,
+      "explanation": "AI models use the conversation history as context. With prior code in context, corrections like 'make the rotation loop instead of stopping' apply precisely to the code the AI already wrote rather than generating something generic.",
+      "answer": 1
+    }
+  ]
+}

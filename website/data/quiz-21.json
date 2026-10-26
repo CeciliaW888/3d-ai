@@ -1,0 +1,66 @@
+{
+  "day": 21,
+  "title": "Final Capstone: Your 3D Web Experience",
+  "questions": [
+    {
+      "question": "You have a React + Vite project with a 3D portfolio scene. What is the fastest way to deploy it to a live, public URL?",
+      "options": [
+        "Connect the GitHub repository to Vercel and let it auto-detect the Vite build",
+        "Export the Vite project as a .zip and upload it to a file hosting service",
+        "Use gltf-transform to generate a standalone HTML file",
+        "Convert the React project to vanilla JavaScript first, then use GitHub Pages"
+      ],
+      "correct": 0,
+      "answer": 0,
+      "explanation": "Vercel auto-detects Vite projects, runs `npm run build`, and deploys to a live URL typically in under 2 minutes. Connecting a GitHub repo takes less than 5 minutes total."
+    },
+    {
+      "question": "For continuing to learn GLSL shaders after this course, which resource is most directly useful?",
+      "options": [
+        "Mixamo - for advanced shader-based rigging techniques",
+        "Shadertoy - a community browser where you can read and fork thousands of GLSL shaders",
+        "Meshy.ai - which generates shader code from text prompts",
+        "gltf-transform - which has a shader optimization module"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "Shadertoy (shadertoy.com) is a browser-based GLSL playground with a massive community of shader experiments you can view, learn from, and fork."
+    },
+    {
+      "question": "Which capstone project option does NOT require a 3D model file (GLB) as input?",
+      "options": [
+        "Option A - 3D Portfolio Hero with animated character",
+        "Option B - Product Configurator with color switching",
+        "Option C - Mini Browser Game with sphere and collectibles",
+        "Both Options A and B require model files but not C"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "Option C (the mini browser game) uses only built-in Three.js primitives - a PlaneGeometry for the ground, SphereGeometry for the player, and BoxGeometry for collectibles. No external 3D model is needed."
+    },
+    {
+      "question": "What is the recommended next course for learning advanced Three.js after completing this course?",
+      "options": [
+        "Blender Guru's tutorials - the best starting point for advanced Three.js",
+        "Shadertoy community workshops - focused on shader techniques only",
+        "Mixamo documentation - for advanced animation and rendering",
+        "Three.js Journey by Bruno Simon - the gold-standard comprehensive Three.js course"
+      ],
+      "correct": 3,
+      "answer": 3,
+      "explanation": "Three.js Journey (threejs-journey.com) by Bruno Simon is widely considered the gold standard for comprehensive Three.js learning, covering fundamentals through advanced shaders, physics, and post-processing."
+    },
+    {
+      "question": "Before deploying your capstone project, which optimization step should you do for any 3D model files?",
+      "options": [
+        "Upload the model to Mixamo to verify it loads correctly",
+        "Run npx gltf-transform optimize to compress geometry and reduce file size",
+        "Convert GLB to OBJ format for better browser compatibility",
+        "Export from Blender again with lower-resolution settings"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "Running `npx gltf-transform optimize input.glb output.glb --draco` before deploying applies Draco mesh compression and other optimizations, reducing file size and improving load times for mobile users."
+    }
+  ]
+}

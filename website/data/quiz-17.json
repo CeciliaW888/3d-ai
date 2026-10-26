@@ -1,0 +1,61 @@
+{
+  "day": 17,
+  "title": "GLSL Shaders: Visual Magic",
+  "questions": [
+    {
+      "question": "In GLSL, what is the purpose of gl_FragColor?",
+      "options": [
+        "Sets the 3D position of a vertex in clip space",
+        "Sets the final RGBA output color of the pixel being rendered",
+        "Declares a uniform variable passed from JavaScript",
+        "Samples a texture from a sampler2D uniform"
+      ],
+      "answer": 1,
+      "explanation": "gl_FragColor is a built-in output variable in GLSL fragment shaders. It holds a vec4 (RGBA) value in the 0.0–1.0 range and determines the final color of each rendered pixel."
+    },
+    {
+      "question": "What is the difference between a uniform and a varying in GLSL?",
+      "options": [
+        "A uniform changes per vertex; a varying changes per pixel",
+        "A uniform is the same across all vertices and fragments in a draw call; a varying is interpolated from the vertex shader to the fragment shader",
+        "A uniform is only available in the fragment shader; a varying is only available in the vertex shader",
+        "A uniform holds texture data; a varying holds position data"
+      ],
+      "answer": 1,
+      "explanation": "Uniforms are constant across an entire draw call (same value for every vertex and fragment). Varyings are written in the vertex shader per vertex and then interpolated by the GPU across the triangle surface before reaching the fragment shader."
+    },
+    {
+      "question": "In Three.js, how do you pass an animated time value to a ShaderMaterial?",
+      "options": [
+        "Add a 'time' property directly to the ShaderMaterial object",
+        "Update material.uniforms.u_time.value in the animation loop",
+        "Use the built-in gl_Time GLSL variable",
+        "Attach a Clock object to the material's constructor"
+      ],
+      "answer": 1,
+      "explanation": "Three.js ShaderMaterial uniforms are updated by setting material.uniforms.u_time.value = clock.getElapsedTime() each frame in the animation loop. There is no built-in gl_Time variable in WebGL."
+    },
+    {
+      "question": "What does the GLSL function mix(a, b, t) return when t = 0.0?",
+      "options": [
+        "The value b",
+        "The average of a and b",
+        "The value a",
+        "Zero regardless of a and b"
+      ],
+      "answer": 2,
+      "explanation": "mix(a, b, t) performs linear interpolation: a * (1.0 - t) + b * t. When t = 0.0, the result is a * 1.0 + b * 0.0 = a. When t = 1.0, the result is b."
+    },
+    {
+      "question": "Why does a PlaneGeometry need many segments (e.g., 32x32) when used with a vertex shader that displaces vertices?",
+      "options": [
+        "More segments improve texture mapping quality",
+        "The vertex shader can only run on triangles, not quads",
+        "Displacement happens at vertices, so more vertices means a smoother wave rather than flat-faced triangles",
+        "Fewer segments cause the fragment shader to run more slowly"
+      ],
+      "answer": 2,
+      "explanation": "Vertex displacement moves actual vertex positions. A PlaneGeometry with only 1x1 segments has 4 vertices — displacement produces a jagged pyramid shape. With 32x32 segments you have 1,089 vertices, producing a smooth wave surface."
+    }
+  ]
+}

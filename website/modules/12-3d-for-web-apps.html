@@ -1,0 +1,168 @@
+<section class="module" id="module-12">
+  <h2>Day 12: 3D for Web Apps — Configurators &amp; Viewers</h2>
+
+  <p>
+    3D moves from decoration to utility when users can interact with it.
+    A product configurator lets customers build emotional ownership before purchasing.
+    Today you learn how to wire React state to 3D materials so clicking a color swatch
+    updates a photorealistic model in real time.
+  </p>
+
+  <div class="callout-accent">
+    <strong>Key insight:</strong> A configurator is a state machine.
+    Selected options live in <code>useState</code>.
+    The 3D model reads that state on every render.
+    No imperative DOM manipulation — React's reconciler handles the update.
+  </div>
+
+  <h3>The R3F Configurator Pattern</h3>
+  <p>
+    Three concepts work together to build a configurator in React Three Fiber.
+  </p>
+
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <div>
+      <strong>useState for selection</strong> — A color hex string, a material preset key, or a
+      part index. When the user clicks a swatch, <code>setSelectedColor</code> re-renders only
+      the affected mesh.
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <div>
+      <strong>meshStandardMaterial for PBR</strong> — Pass <code>color</code>,
+      <code>roughness</code>, and <code>metalness</code> as props.
+      Changing any prop triggers a minimal re-render — no manual Three.js calls needed.
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <div>
+      <strong>Environment for reflections</strong> — Wrap the scene in
+      <code>&lt;Environment preset="studio" /&gt;</code> from drei.
+      Metallic and glossy materials pick up HDR reflections automatically — no extra lights.
+    </div>
+  </div>
+
+  <pre><code class="language-jsx">import { useState, Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Environment, useGLTF } from '@react-three/drei';
+
+const COLOR_OPTIONS = [
+  { label: 'Midnight', value: '#1a1a2e' },
+  { label: 'Ocean',    value: '#0077b6' },
+  { label: 'Coral',    value: '#e76f51' },
+  { label: 'Sage',     value: '#74c69d' },
+];
+
+function ProductModel({ color }) {
+  const { scene } = useGLTF('/models/product.glb');
+
+  scene.traverse((node) => {
+    if (node.isMesh && node.name.includes('Body')) {
+      node.material = node.material.clone(); // avoid mutating shared material
+      node.material.color.set(color);
+    }
+  });
+
+  return &lt;primitive object={scene} /&gt;;
+}
+
+useGLTF.preload('/models/product.glb');
+
+export default function Configurator() {
+  const [selectedColor, setSelectedColor] = useState(COLOR_OPTIONS[0].value);
+
+  return (
+    &lt;div style={{ display: 'flex', gap: '2rem' }}&gt;
+      &lt;div style={{ width: '600px', height: '500px' }}&gt;
+        &lt;Canvas camera={{ position: [0, 1, 4], fov: 45 }}&gt;
+          &lt;Suspense fallback={null}&gt;
+            &lt;ambientLight intensity={0.3} /&gt;
+            &lt;Environment preset="studio" /&gt;
+            &lt;ProductModel color={selectedColor} /&gt;
+            &lt;OrbitControls enablePan={false} minDistance={2} maxDistance={8} /&gt;
+          &lt;/Suspense&gt;
+        &lt;/Canvas&gt;
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        {COLOR_OPTIONS.map((opt) =&gt; (
+          &lt;button
+            key={opt.value}
+            onClick={() =&gt; setSelectedColor(opt.value)}
+            style={{ background: opt.value, borderRadius: '50%', width: 40, height: 40 }}
+          /&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+  <div class="callout-info">
+    <strong>No-code option:</strong> For a simple drop-in viewer without React, use
+    <code>&lt;model-viewer&gt;</code> — Google's web component. Add one script tag and
+    one custom element. It handles orbit controls, environment lighting, and AR mode
+    automatically.
+    <br>
+    <code>&lt;script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"&gt;&lt;/script&gt;</code>
+  </div>
+
+  <h3>Suspense and Loading States</h3>
+  <p>
+    GLB files can be several megabytes. Without a loading state the canvas is blank while the
+    file downloads. Wrap your model component in React <code>&lt;Suspense&gt;</code> and add
+    <code>&lt;Loader /&gt;</code> from drei outside the Canvas for a ready-made progress overlay.
+    Call <code>useGLTF.preload(url)</code> at module scope so downloading starts before the
+    component mounts.
+  </p>
+
+  <h3>Environment Maps for Realistic Reflections</h3>
+  <p>
+    An environment map is an HDR panoramic image wrapped around the scene.
+    Every reflective or glossy surface in the scene samples this image for its reflections.
+    Drei's <code>&lt;Environment&gt;</code> has presets including
+    <em>studio</em>, <em>city</em>, <em>sunset</em>, <em>dawn</em>, <em>night</em>,
+    <em>warehouse</em>, and <em>forest</em>.
+    Switching presets dramatically changes the mood of your material.
+  </p>
+
+  <div class="callout-warning">
+    <strong>Material cloning:</strong> If multiple meshes share the same material instance,
+    calling <code>material.color.set()</code> on one changes all of them.
+    Always call <code>node.material.clone()</code> before modifying a material in a loaded model.
+  </div>
+
+  <div class="quiz-card"
+    data-correct="1"
+    data-explanation-0="Textures provide image-based color and detail but environment maps supply the scene-wide lighting panorama for reflections."
+    data-explanation-1="Correct. An environment map is an HDR panoramic image that wraps the scene so reflective and glossy surfaces sample it for physically accurate reflections."
+    data-explanation-2="Shadow maps record depth from a light source for shadow casting, not scene reflections."
+    data-explanation-3="A normal map encodes surface micro-detail as color data — it does not provide environmental reflections.">
+    <p class="quiz-question">What does adding <code>&lt;Environment preset="studio" /&gt;</code> provide to materials in a React Three Fiber scene?</p>
+    <ol class="quiz-options">
+      <li>Albedo texture for every mesh</li>
+      <li>An HDR panoramic image for reflections on glossy and metallic surfaces</li>
+      <li>Shadow maps from studio lights</li>
+      <li>Normal map data for surface detail</li>
+    </ol>
+  </div>
+
+  <div class="quiz-card"
+    data-correct="3"
+    data-explanation-0="Cloning the material prevents shared-material mutation, but it does not explain why preload is useful."
+    data-explanation-1="Suspense shows a fallback while loading, but preload starts the download earlier."
+    data-explanation-2="OrbitControls handles camera interaction, not asset loading."
+    data-explanation-3="Correct. useGLTF.preload(url) starts downloading the GLB at module evaluation time, before the component mounts, so the file arrives sooner and the loading state is shorter.">
+    <p class="quiz-question">Why call <code>useGLTF.preload('/models/product.glb')</code> at module scope?</p>
+    <ol class="quiz-options">
+      <li>It prevents material sharing between mesh instances</li>
+      <li>It shows a Suspense fallback while the model loads</li>
+      <li>It enables OrbitControls on the loaded model</li>
+      <li>It starts downloading the file before the component mounts, reducing loading time</li>
+    </ol>
+  </div>
+</section>

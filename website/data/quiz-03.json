@@ -1,0 +1,66 @@
+{
+  "day": 3,
+  "title": "Text-to-3D AI: Meshy & Tripo3D",
+  "questions": [
+    {
+      "question": "What output format should you download from Meshy.ai for use in a Three.js project?",
+      "options": [
+        "FBX with separate texture files",
+        "OBJ with MTL material file",
+        "GLB (binary GLTF with embedded textures)",
+        "STL (stereolithography mesh)"
+      ],
+      "answer": 2,
+      "correct": 2,
+      "explanation": "GLB is the best choice for web projects — it bundles the mesh and all PBR textures into a single binary file that Three.js's GLTFLoader handles natively."
+    },
+    {
+      "question": "What is 'retopology' in the context of AI-generated 3D models?",
+      "options": [
+        "Applying a new texture to a model",
+        "Rewriting the mesh with cleaner, more optimized geometry and polygon flow",
+        "Scaling the model to a different size",
+        "Converting a GLB file to OBJ format"
+      ],
+      "answer": 1,
+      "correct": 1,
+      "explanation": "AI-generated meshes often have messy, irregular triangle distributions. Retopology is the process of rebuilding the surface with cleaner geometry — important for rigging, animation, and performance."
+    },
+    {
+      "question": "Which part of a Meshy.ai text prompt most improves output quality?",
+      "options": [
+        "Using all lowercase text",
+        "Specifying a short, vague description like 'a sword'",
+        "Describing shape, material, style, and use case in detail",
+        "Adding the word 'photorealistic' at the end"
+      ],
+      "answer": 2,
+      "correct": 2,
+      "explanation": "The more specific your prompt (shape, material, style, scale, purpose), the better the AI can match your intent. Compare 'a sword' vs 'a weathered iron longsword with a golden crossguard, low-poly game-ready style'."
+    },
+    {
+      "question": "What is a negative prompt in AI 3D generation?",
+      "options": [
+        "A prompt that reduces the quality on purpose",
+        "A list of things to include in the model",
+        "A description of features to AVOID in the output",
+        "The prompt used to delete a generated model"
+      ],
+      "answer": 2,
+      "correct": 2,
+      "explanation": "A negative prompt tells the AI what NOT to generate — e.g., 'blurry, low quality, deformed, watermark'. It helps steer the model away from common failure modes."
+    },
+    {
+      "question": "After loading a GLB from Meshy in Three.js, the model appears off-center. What's the fix?",
+      "options": [
+        "Delete the model and regenerate it",
+        "Change the camera position to match the model's offset",
+        "Compute the model's bounding box, find its center, then subtract that from the model's position",
+        "Scale the model by 0.01 to normalize coordinates"
+      ],
+      "answer": 2,
+      "correct": 2,
+      "explanation": "AI-generated models often have their origin at a corner or bottom of the mesh, not the center. Use new THREE.Box3().setFromObject(model) to compute the bounding box, then model.position.sub(center) to reposition it."
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+<section class="module" id="module-11">
+  <h2>Day 11: 3D for Websites — Scroll &amp; Parallax</h2>
+
+  <p>
+    When a 3D scene responds to scroll, it stops being decoration and becomes navigation.
+    Today you learn how to architect scroll-driven Three.js scenes, map scroll progress to 3D
+    transforms, and create the kind of layered parallax depth used on award-winning websites.
+  </p>
+
+  <div class="callout-accent">
+    <strong>Key insight:</strong> Scroll-driven 3D works by normalizing scroll position to a
+    0-to-1 number and lerp-ing a 3D property toward the target on every animation frame.
+    Never set values directly in the scroll event — lerp inside <code>requestAnimationFrame</code>.
+  </div>
+
+  <h3>Canvas Positioning Strategies</h3>
+  <p>
+    How the canvas sits in the DOM determines what scroll behavior you can build.
+    Choosing the wrong strategy creates scrolling glitches that are painful to debug.
+  </p>
+
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <div>
+      <strong>Fixed canvas</strong> — <code>position: fixed</code>, full viewport, behind page
+      content. Best for a single 3D scene that spans the whole page. Simplest setup.
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <div>
+      <strong>Sticky canvas</strong> — Canvas inside a tall wrapper div with
+      <code>position: sticky; top: 0</code>. Active only while its section is in view.
+      Great for multi-chapter pages with distinct 3D moments.
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <div>
+      <strong>Inline canvas</strong> — Normal block element in document flow.
+      Use <code>IntersectionObserver</code> to pause rendering when off-screen.
+      Most performance-friendly for pages with many 3D sections.
+    </div>
+  </div>
+
+  <h3>Mapping Scroll to 3D State</h3>
+  <p>
+    Normalize the scroll position to a 0-to-1 fraction. Use it to compute target values for
+    camera position, rotation, or any other property. Then lerp each rendered value toward
+    its target every frame for smooth motion.
+  </p>
+
+  <pre><code class="language-js">import * as THREE from 'three';
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 100);
+camera.position.set(0, 0, 5);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.domElement.style.position = 'fixed';
+renderer.domElement.style.top = '0';
+renderer.domElement.style.left = '0';
+renderer.domElement.style.zIndex = '-1';
+document.body.appendChild(renderer.domElement);
+
+document.body.style.height = '400vh'; // make page scrollable
+
+const geo = new THREE.TorusKnotGeometry(1, 0.3, 128, 32);
+const mat = new THREE.MeshStandardMaterial({ color: 0x6d5eff });
+const mesh = new THREE.Mesh(geo, mat);
+scene.add(mesh);
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+scene.add(Object.assign(new THREE.PointLight(0xffffff, 2, 20), { position: { x: 5, y: 5, z: 5 } }));
+
+let targetRotationY = 0;
+let targetCameraZ = 5;
+let currentRotationY = 0;
+let currentCameraZ = 5;
+
+window.addEventListener('scroll', () => {
+  const scrollFraction = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  targetRotationY = scrollFraction * Math.PI * 2; // full rotation by page end
+  targetCameraZ = 5 - scrollFraction * 3;         // drift camera closer
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  // Lerp: smooth chase toward target values
+  currentRotationY += (targetRotationY - currentRotationY) * 0.08;
+  currentCameraZ   += (targetCameraZ   - currentCameraZ)   * 0.08;
+  mesh.rotation.y = currentRotationY;
+  camera.position.z = currentCameraZ;
+  renderer.render(scene, camera);
+}
+animate();</code></pre>
+
+  <div class="callout-info">
+    <strong>GSAP ScrollTrigger shortcut:</strong> In React Three Fiber, import
+    <code>gsap</code> and <code>ScrollTrigger</code>, register the plugin, and use
+    <code>scrub: 1</code> in the trigger config to get built-in lerping without writing
+    the math yourself. Set <code>rotationTarget.current</code> inside <code>onUpdate</code>,
+    then read it in <code>useFrame</code>.
+  </div>
+
+  <h3>Parallax Depth Effect</h3>
+  <p>
+    Place several objects at different Z depths and advance each at a different scroll rate.
+    A background particle cloud might move 0.1 units per 100px of scroll while a foreground
+    logo moves 0.5 units — the difference in speed reads as depth to the eye.
+  </p>
+
+  <h3>Real-World Inspiration</h3>
+  <p>
+    Apple's product pages rotate and disassemble hardware in sync with scroll.
+    Awwwards-winning sites morph geometry or form words from particles as you descend.
+    Stripe's homepage uses a subtle 3D gradient mesh that parallaxes on scroll and hover.
+    What these share: the motion never fights the user — it amplifies the gesture they are
+    already making.
+  </p>
+
+  <div class="callout-warning">
+    <strong>Performance warning:</strong> A fixed-canvas scene renders on every animation
+    frame even when the user is not scrolling and nothing is moving. Add an
+    <code>IntersectionObserver</code> that pauses
+    <code>renderer.setAnimationLoop(null)</code> when the canvas is off-screen, and
+    call <code>renderer.setAnimationLoop(animate)</code> when it returns.
+  </div>
+
+  <div class="quiz-card"
+    data-correct="3"
+    data-explanation-0="Fixed canvas stays visible anywhere on the page, not just inside its section."
+    data-explanation-1="Inline canvas is in normal flow but does not automatically pin itself."
+    data-explanation-2="A parallax canvas is not a standard positioning term."
+    data-explanation-3="Correct. A sticky canvas sticks to the viewport only while the user scrolls through its parent container, then exits naturally.">
+    <p class="quiz-question">Which canvas positioning strategy stays in view only while the user scrolls through its parent section, then exits?</p>
+    <ol class="quiz-options">
+      <li>Fixed canvas</li>
+      <li>Inline canvas</li>
+      <li>Parallax canvas</li>
+      <li>Sticky canvas</li>
+    </ol>
+  </div>
+
+  <div class="quiz-card"
+    data-correct="0"
+    data-explanation-0="Correct. Lerping inside requestAnimationFrame smooths out the choppy discrete values from the scroll event into fluid per-frame motion."
+    data-explanation-1="Setting values directly in the scroll handler gives jittery motion because scroll events fire at the browser's rate, not the render rate."
+    data-explanation-2="setTimeout adds delay but does not smooth the interpolation."
+    data-explanation-3="requestIdleCallback fires during idle time and is not tied to the render loop.">
+    <p class="quiz-question">Why should you lerp 3D values inside <code>requestAnimationFrame</code> rather than setting them directly inside the scroll event handler?</p>
+    <ol class="quiz-options">
+      <li>Lerping produces smooth per-frame interpolation toward the target</li>
+      <li>Scroll events update values at the render framerate automatically</li>
+      <li>setTimeout adds the necessary delay for smooth motion</li>
+      <li>requestIdleCallback ties scroll updates to the render loop</li>
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,162 @@
+<section class="module" id="module-15" data-module="module-15">
+  <div class="module-header animate-in">
+    <span class="module-tag module-tag--foundations">Foundations</span>
+    <h2 class="module-title">Day 15: Browser 3D Games with Three.js</h2>
+    <p class="module-subtitle">
+      Build a complete browser game from scratch using Three.js — game loop, keyboard input,
+      AABB collision, and a 30-second "collect the cubes" challenge.
+    </p>
+  </div>
+
+  <div class="callout callout-info animate-in">
+    <strong>The key concept:</strong>
+    Every update must be multiplied by <code>delta</code> — the time in seconds since the last frame.
+    This makes your game run at the same speed on a 30Hz tablet and a 144Hz gaming monitor.
+  </div>
+
+  <!-- Game loop architecture -->
+  <h3 class="section-heading animate-in">The Game Loop</h3>
+
+  <div class="step-cards animate-in">
+    <div class="step-card" data-stagger>
+      <span class="step-number">1</span>
+      <div class="step-content">
+        <strong>Create the clock</strong>
+        <pre><code class="language-js">const clock = new THREE.Clock();</code></pre>
+        <p><code>THREE.Clock</code> measures real wall-clock time between calls, not frame count.</p>
+      </div>
+    </div>
+
+    <div class="step-card" data-stagger>
+      <span class="step-number">2</span>
+      <div class="step-content">
+        <strong>Measure delta each frame</strong>
+        <pre><code class="language-js">function animate() {
+  requestAnimationFrame(animate);
+  const delta = clock.getDelta(); // seconds since last call
+  update(delta);
+  renderer.render(scene, camera);
+}</code></pre>
+        <p><code>getDelta()</code> returns roughly <code>0.016</code> at 60 FPS and <code>0.033</code> at 30 FPS.</p>
+      </div>
+    </div>
+
+    <div class="step-card" data-stagger>
+      <span class="step-number">3</span>
+      <div class="step-content">
+        <strong>Scale all movement by delta</strong>
+        <pre><code class="language-js">// Without delta: speed depends on frame rate
+player.position.x += 0.05;  // BAD
+
+// With delta: always 5 units per second
+player.position.x += 5 * delta;  // GOOD</code></pre>
+      </div>
+    </div>
+
+    <div class="step-card" data-stagger>
+      <span class="step-number">4</span>
+      <div class="step-content">
+        <strong>Poll keyboard input</strong>
+        <pre><code class="language-js">const keys = {};
+window.addEventListener('keydown', e => { keys[e.code] = true; });
+window.addEventListener('keyup',   e => { keys[e.code] = false; });
+
+// In update():
+if (keys['KeyW']) player.position.z -= speed * delta;
+if (keys['KeyS']) player.position.z += speed * delta;</code></pre>
+      </div>
+    </div>
+
+    <div class="step-card" data-stagger>
+      <span class="step-number">5</span>
+      <div class="step-content">
+        <strong>AABB collision check</strong>
+        <pre><code class="language-js">function aabbOverlap(posA, posB, sizeA, sizeB) {
+  const half = (sizeA + sizeB) / 2;
+  return (
+    Math.abs(posA.x - posB.x) &lt; half &amp;&amp;
+    Math.abs(posA.y - posB.y) &lt; half &amp;&amp;
+    Math.abs(posA.z - posB.z) &lt; half
+  );
+}</code></pre>
+        <p>Returns <code>true</code> when two axis-aligned boxes overlap on all three axes.</p>
+      </div>
+    </div>
+
+    <div class="step-card" data-stagger>
+      <span class="step-number">6</span>
+      <div class="step-content">
+        <strong>Game state management</strong>
+        <pre><code class="language-js">const state = {
+  phase:    'playing', // 'playing' | 'gameover'
+  score:    0,
+  timeLeft: 30,
+};
+
+function update(delta) {
+  if (state.phase !== 'playing') return;
+  state.timeLeft -= delta;
+  if (state.timeLeft &lt;= 0) {
+    state.phase = 'gameover';
+  }
+  // ... rest of update
+}</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Physics teaser -->
+  <div class="callout callout-accent animate-in">
+    <strong>When to add a physics engine</strong>
+    <p>
+      Manual AABB works fine for simple rectangular objects.
+      Once you need gravity, rolling, stacking, or non-box shapes, use
+      <code>@dimforge/rapier3d-compat</code>.
+      Rapier runs as WebAssembly — fast enough for hundreds of rigid bodies in the browser.
+    </p>
+    <pre><code class="language-js">import RAPIER from '@dimforge/rapier3d-compat';
+await RAPIER.init(); // loads WASM binary
+const world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
+// In the loop: world.step(); then copy positions back to meshes.</code></pre>
+  </div>
+
+  <!-- Warning -->
+  <div class="callout callout-warning animate-in">
+    <strong>Fast-moving objects can skip through geometry</strong> in a single frame if they move
+    farther than the object size between updates.
+    Clamp high-speed objects or use Rapier's continuous collision detection (<code>CCD</code>) for bullets and projectiles.
+  </div>
+
+  <!-- Quiz -->
+  <h3 class="section-heading animate-in">Quick Check</h3>
+
+  <div class="quiz-card animate-in"
+    data-correct="3"
+    data-explanation-0="requestAnimationFrame does not guarantee a fixed interval — it fires before each display repaint, which varies with monitor refresh rate and CPU load."
+    data-explanation-1="THREE.Clock measures wall-clock time, not frame count. getDelta() returns seconds elapsed, not the frame number."
+    data-explanation-2="player.position.x += 5 moves the player by 5 units every frame regardless of how long the frame took, causing faster movement on higher frame rates."
+    data-explanation-3="Correct! Multiplying by delta (seconds since last frame) makes movement speed consistent across all frame rates: 5 * 0.016 = 0.08 units at 60fps, 5 * 0.033 = 0.165 units at 30fps — both equal to 5 units per second."
+  >
+    <p class="quiz-question">
+      A player moves with <code>player.position.x += speed * delta</code> where <code>speed = 5</code>.
+      Why is this better than <code>player.position.x += 0.08</code>?
+    </p>
+    <div class="quiz-options">
+      <button class="quiz-option">requestAnimationFrame always fires exactly 60 times per second, so delta is always 0.016</button>
+      <button class="quiz-option">THREE.Clock.getDelta() returns the current frame number, not a time value</button>
+      <button class="quiz-option">Adding 0.08 per frame gives exactly 5 units per second at 60 FPS — both approaches are identical</button>
+      <button class="quiz-option">Multiplying by delta ensures the player always moves at 5 units per second regardless of frame rate</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <!-- Reflection -->
+  <div class="reflection-card animate-in" data-reflection="day15-game-idea">
+    <p class="reflection-prompt">
+      Describe a simple 3D browser game you could build in one weekend using the patterns from today.
+      What would the player do, what would the win/lose condition be, and what Three.js geometries would you use?
+    </p>
+    <textarea rows="4" placeholder="e.g. A maze-runner where the player navigates a procedurally generated maze before a timer expires..."></textarea>
+    <button class="save-reflection btn btn--secondary">Save note</button>
+  </div>
+</section>

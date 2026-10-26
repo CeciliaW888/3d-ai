@@ -1,0 +1,61 @@
+{
+  "day": 8,
+  "title": "Image-to-3D AI Tools",
+  "questions": [
+    {
+      "question": "What is the fundamental difference between photogrammetry and NeRF as image-to-3D approaches?",
+      "options": [
+        "Photogrammetry only works on large objects; NeRF works on small ones",
+        "Photogrammetry reconstructs geometry by matching feature points across photos; NeRF encodes a scene as a neural network that predicts color at any 3D point",
+        "NeRF requires hundreds of photos while photogrammetry works with just one",
+        "Photogrammetry produces NeRF-format output; they are the same pipeline"
+      ],
+      "answer": 1,
+      "explanation": "Photogrammetry uses computer vision to triangulate 3D positions from matching feature points across many photographs. NeRF (Neural Radiance Field) trains a neural network to predict color and opacity at any point in 3D space from a set of posed input images - a fundamentally different representation."
+    },
+    {
+      "question": "You need a web-ready GLB of a product in the shortest time possible, starting from a single product photo. Which tool category is the fastest path?",
+      "options": [
+        "Photogrammetry with Polycam - takes only a few seconds per photo",
+        "NeRF capture with Luma AI - it auto-converts to GLB instantly",
+        "Diffusion-based AI tools like Meshy.ai image-to-3D",
+        "Manual 3D modelling in Blender from the photo reference"
+      ],
+      "answer": 2,
+      "explanation": "Diffusion-based tools like Meshy.ai take 1-3 minutes from a single photo to a downloadable GLB. Photogrammetry requires 30+ photos and cleanup; NeRF requires video or many photos plus mesh extraction. Manual modelling is hours."
+    },
+    {
+      "question": "A diffusion-based image-to-3D tool generates a model from a photo of a shoe. The front and sides look accurate, but the back heel has the wrong shape. Why does this happen?",
+      "options": [
+        "The GLB format cannot encode complex curves on the back of objects",
+        "Diffusion models infer unseen views by hallucination - they guess what the back looks like based on training data, not the actual photo",
+        "The lighting in the input photo confuses the depth estimation",
+        "This is a known Three.js rendering bug with shoe geometry"
+      ],
+      "answer": 1,
+      "explanation": "Diffusion-based models only see what is in the supplied photos. They infer (hallucinate) all unseen angles using patterns learned from training data. The result is often plausible but incorrect for objects with unique back details."
+    },
+    {
+      "question": "An AI-generated GLB has 350,000 triangles and is 8 MB. What are two appropriate actions before embedding it in a web page?",
+      "options": [
+        "Increase the Three.js renderer polygon budget and add more RAM to the server",
+        "Apply Draco compression with gltf-pipeline and reduce polygons with Blender's Decimate modifier",
+        "Convert the GLB to OBJ format and use OBJLoader instead",
+        "Enable WebGL 2.0 and increase the maximum texture size"
+      ],
+      "answer": 1,
+      "explanation": "For web use, target under 100k triangles and under 3 MB. Draco compression (gltf-pipeline -d flag) reduces file size 60-80%. Blender's Decimate modifier reduces polygon count. These two steps together address both issues."
+    },
+    {
+      "question": "What does Draco compression do to a GLB file?",
+      "options": [
+        "It reduces texture resolution to lower file size",
+        "It converts the GLB to a streaming format that loads progressively",
+        "It compresses mesh geometry (vertices and indices) using Google's Draco codec, requiring the DRACOLoader alongside GLTFLoader",
+        "It removes animation data to make the file smaller"
+      ],
+      "answer": 2,
+      "explanation": "Draco is Google's geometry compression codec. It compresses vertex positions, normals, and UV coordinates using predictive encoding, achieving 60-80% size reduction on mesh geometry. You must include DRACOLoader alongside GLTFLoader and point it at the Draco decoder scripts."
+    }
+  ]
+}

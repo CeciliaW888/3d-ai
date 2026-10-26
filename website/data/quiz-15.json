@@ -1,0 +1,66 @@
+{
+  "day": 15,
+  "title": "Browser 3D Games with Three.js",
+  "questions": [
+    {
+      "question": "What does clock.getDelta() return in a Three.js game loop?",
+      "options": [
+        "The total number of frames rendered since the clock was created",
+        "The current timestamp in milliseconds since the page loaded",
+        "The elapsed time in seconds since the last call to getDelta()",
+        "The current frame rate as frames per second"
+      ],
+      "correct": 2,
+      "explanation": "getDelta() returns the time in seconds since it was last called. At 60 FPS this is about 0.016, at 30 FPS about 0.033. Multiplying movement by this value makes speed frame-rate independent.",
+      "answer": 2
+    },
+    {
+      "question": "A player moves with: player.position.z -= 8 * delta. What does this guarantee?",
+      "options": [
+        "The player moves exactly 8 pixels toward the camera every frame",
+        "The player moves at 8 Three.js units per second regardless of frame rate",
+        "The player rotates 8 degrees per second around the Z axis",
+        "The player reaches position z = -8 after exactly one second only at 60 FPS"
+      ],
+      "correct": 1,
+      "explanation": "Multiplying by delta converts per-frame movement into per-second movement. 8 * 0.016 = 0.128 units at 60 FPS; 8 * 0.033 = 0.264 units at 30 FPS \u2014 both sum to approximately 8 units per second.",
+      "answer": 1
+    },
+    {
+      "question": "Why is polling (maintaining a 'keys' object) better than using only keydown events for smooth game movement?",
+      "options": [
+        "keydown events fire faster than polling on high-refresh-rate displays",
+        "Polling uses less memory than registering event listeners",
+        "keydown fires once with OS key-repeat delay; polling reads the held state every frame for smooth continuous movement",
+        "Event listeners cannot detect arrow keys in browsers, only letter keys"
+      ],
+      "correct": 2,
+      "explanation": "The OS fires keydown once immediately, then again after a delay, then repeatedly. Polling reads whether the key is currently held on every frame, giving smooth movement without the initial stutter caused by OS key-repeat.",
+      "answer": 2
+    },
+    {
+      "question": "AABB collision detection gives an incorrect result when:",
+      "options": [
+        "One of the objects is a Three.js Mesh rather than a Group",
+        "Both objects are at the same Y position on the ground",
+        "The scene contains more than 20 simultaneous AABB checks",
+        "The objects are rotating, since AABB assumes axis-aligned (non-rotating) bounding boxes"
+      ],
+      "correct": 3,
+      "explanation": "AABB stands for Axis-Aligned Bounding Box. The boxes must remain aligned with the world axes. Rotated objects extend beyond their bounding box corners, causing missed or incorrect collision results.",
+      "answer": 3
+    },
+    {
+      "question": "What is the main reason to use a physics engine like Rapier.js instead of manual AABB for a game?",
+      "options": [
+        "Rapier handles gravity, friction, joints, and complex collider shapes that manual AABB cannot simulate",
+        "Rapier renders geometry faster than the Three.js WebGLRenderer",
+        "AABB does not work in browsers \u2014 it only runs in Node.js environments",
+        "Manual collision detection requires a paid Three.js Pro license for production use"
+      ],
+      "correct": 0,
+      "explanation": "Manual AABB is limited to non-rotating box-shaped objects. Rapier handles rigid body simulation with gravity, forces, multiple collider shapes (spheres, capsules, convex hulls), joints, and continuous collision detection.",
+      "answer": 0
+    }
+  ]
+}

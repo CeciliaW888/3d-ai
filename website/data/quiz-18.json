@@ -1,0 +1,61 @@
+{
+  "day": 18,
+  "title": "Performance Optimization for Web 3D",
+  "questions": [
+    {
+      "question": "A scene renders 800 separate Mesh objects, each with a unique material. What is the primary performance bottleneck?",
+      "options": [
+        "Too many draw calls — one per Mesh object",
+        "Too many triangles in the scene",
+        "Textures consuming too much VRAM",
+        "JavaScript running too slowly on the main thread"
+      ],
+      "answer": 0,
+      "explanation": "Each separate Mesh with its own material generates a draw call. 800 draw calls far exceeds the 200–500 draw call budget for most devices. Draw calls are typically the #1 bottleneck in web 3D — before polygon count or texture memory."
+    },
+    {
+      "question": "When using THREE.InstancedMesh with 1,000 instances, how many draw calls does it produce?",
+      "options": [
+        "1,000 — one per instance",
+        "10 — one per 100 instances",
+        "1 — all instances are rendered in a single draw call",
+        "It depends on the polygon count of the geometry"
+      ],
+      "answer": 2,
+      "explanation": "InstancedMesh renders all N copies of a geometry+material pair in exactly one draw call. The GPU receives the geometry and material once, plus a buffer of per-instance transformation matrices, and handles the rest internally."
+    },
+    {
+      "question": "After creating an InstancedMesh and setting positions with mesh.setMatrixAt(), what must you do before the positions appear on screen?",
+      "options": [
+        "Call mesh.updateMatrixWorld()",
+        "Set mesh.instanceMatrix.needsUpdate = true",
+        "Call renderer.resetCache()",
+        "Add mesh to a BufferGeometry first"
+      ],
+      "answer": 1,
+      "explanation": "Three.js buffers instance matrices in a typed array on the CPU. Setting mesh.instanceMatrix.needsUpdate = true signals Three.js to upload the updated matrix buffer to the GPU before the next render. Without this flag, changes to instance positions are ignored."
+    },
+    {
+      "question": "What is the key benefit of KTX2 / Basis Universal texture compression compared to PNG?",
+      "options": [
+        "Smaller file size on disk only — decompressed at the same size in VRAM",
+        "Textures stay compressed in GPU VRAM, reducing memory usage at runtime",
+        "KTX2 files support higher color depth than PNG",
+        "KTX2 files load faster because they skip the JavaScript parsing step"
+      ],
+      "answer": 1,
+      "explanation": "PNG textures are decompressed to full RGBA when uploaded to GPU memory. A 2048×2048 PNG uses 16 MB of VRAM. The same image as KTX2 ETC1S stays compressed in VRAM at around 0.5 MB — a 32x reduction in GPU memory usage."
+    },
+    {
+      "question": "Geometry merging (mergeGeometries) reduces draw calls for static objects, but what is its main limitation?",
+      "options": [
+        "Merged geometry cannot use textures",
+        "Merged objects can no longer be moved, hidden, or modified individually",
+        "Merging increases total polygon count",
+        "Only geometries with identical materials can be merged"
+      ],
+      "answer": 1,
+      "explanation": "Once geometries are merged into a single BufferGeometry, the individual objects lose their separate identities. You cannot move, hide, or apply different animations to parts of a merged mesh. Use merging only for permanently static geometry like floors, walls, and terrain."
+    }
+  ]
+}

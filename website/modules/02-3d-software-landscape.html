@@ -1,0 +1,79 @@
+<section class="module" id="module-2">
+  <h2>Day 2: The 3D Software Landscape</h2>
+
+  <div class="callout-accent">
+    <strong>The right tool for the job:</strong> You don't need to master every 3D tool — you need to know which one to reach for.
+    This map will guide every decision in the course.
+  </div>
+
+  <h3>The Core Tools</h3>
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <div>
+      <strong>Blender</strong> — free, open-source 3D modeling/animation suite.
+      Use it for: precise modeling, UV unwrapping, rigging, and exporting clean GLB files.
+      Steep learning curve, but unmatched power.
+    </div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <div>
+      <strong>Three.js</strong> — JavaScript WebGL library.
+      Use it for: any 3D you write code for — games, interactive scenes, data viz.
+      No visual editor, full programmatic control.
+    </div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <div>
+      <strong>React Three Fiber (R3F)</strong> — Three.js with JSX.
+      Use it for: 3D inside React apps. Brings component reusability, hooks, and state management to 3D.
+    </div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">4</span>
+    <div>
+      <strong>Spline</strong> — no-code browser-based 3D editor.
+      Use it for: hero sections and marketing 3D without writing any Three.js.
+      Export as embeddable web component.
+    </div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">5</span>
+    <div>
+      <strong>Meshy.ai / Tripo3D</strong> — AI text-to-3D generators.
+      Use them for: rapid asset creation from text or image prompts.
+      Output: GLB/OBJ files with textures ready for the web.
+    </div>
+  </div>
+
+  <h3>The Universal Format: GLB / GLTF</h3>
+  <p>
+    GLTF (GL Transmission Format) is the "JPEG of 3D" — a compact, web-optimized 3D file format created by the Khronos Group.
+    <strong>GLB</strong> is the binary single-file version that bundles geometry, textures, and animations into one file.
+  </p>
+  <div class="callout-info">
+    <strong>Why GLB?</strong> OBJ requires separate material files. FBX is proprietary (Autodesk).
+    GLB is open-standard, smaller, loads faster, and natively supported by Three.js, R3F, Spline, and model-viewer.
+  </div>
+
+  <div class="quiz-card" data-correct="0" data-explanation-0="Correct! GLB is the binary version of GLTF — it bundles all assets (geometry, textures, animations) into a single file, making it ideal for the web." data-explanation-1="FBX is an Autodesk proprietary format, primarily used in game engines like Unity/Unreal, not the web." data-explanation-2="OBJ is a simple geometry-only format that requires separate MTL material files. It cannot store animations." data-explanation-3="SVG is a 2D vector format, not a 3D format.">
+    <p class="quiz-question">Which file format is considered the standard for 3D on the web?</p>
+    <ul class="quiz-options">
+      <li>GLB (binary GLTF)</li>
+      <li>FBX (Autodesk)</li>
+      <li>OBJ (Wavefront)</li>
+      <li>SVG</li>
+    </ul>
+  </div>
+
+  <div class="quiz-card" data-correct="3" data-explanation-0="Blender is free and open-source, not proprietary." data-explanation-1="Three.js is a code-based library, not a visual no-code editor." data-explanation-2="Meshy.ai generates 3D from prompts but doesn't provide a visual canvas for interactive 3D editing." data-explanation-3="Correct! Spline is a no-code browser-based tool. You can build interactive 3D scenes visually and export embed code — no JavaScript required.">
+    <p class="quiz-question">Which tool lets you create an interactive 3D web scene without writing any code?</p>
+    <ul class="quiz-options">
+      <li>Blender</li>
+      <li>Three.js</li>
+      <li>Meshy.ai</li>
+      <li>Spline</li>
+    </ul>
+  </div>
+</section>

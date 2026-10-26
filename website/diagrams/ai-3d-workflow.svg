@@ -1,0 +1,95 @@
+<svg viewBox="0 0 820 320" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+  <rect width="820" height="320" fill="#f0f7f6" rx="12"/>
+
+  <text x="410" y="30" text-anchor="middle" font-size="15" font-weight="700" fill="#1a2e2c">AI-Assisted 3D Workflow</text>
+
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#0d9488"/>
+    </marker>
+  </defs>
+
+  <!-- Step boxes — vertical flow with 2 rows -->
+  <!-- Row 1: Prompt → AI Generate → Download GLB -->
+  <!-- Row 2: Blender Cleanup → GLTF Export → Three.js/R3F → Deploy -->
+
+  <!-- Row 1 -->
+  <rect x="20"  y="70" width="110" height="90" rx="10" fill="#0d9488" opacity=".14" stroke="#0d9488" stroke-width="1.5"/>
+  <text x="75"  y="107" text-anchor="middle" font-size="22">💬</text>
+  <text x="75"  y="126" text-anchor="middle" font-size="11" font-weight="600" fill="#0d9488">Text Prompt</text>
+  <text x="75"  y="141" text-anchor="middle" font-size="9"  fill="#4b6360">"a ceramic vase</text>
+  <text x="75"  y="152" text-anchor="middle" font-size="9"  fill="#4b6360">with blue glaze"</text>
+
+  <line x1="132" y1="115" x2="152" y2="115" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+  <rect x="155" y="70" width="110" height="90" rx="10" fill="#7c3aed" opacity=".12" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="210" y="107" text-anchor="middle" font-size="22">🤖</text>
+  <text x="210" y="126" text-anchor="middle" font-size="11" font-weight="600" fill="#7c3aed">AI Generate</text>
+  <text x="210" y="141" text-anchor="middle" font-size="9"  fill="#4b6360">Meshy / Tripo3D</text>
+  <text x="210" y="152" text-anchor="middle" font-size="9"  fill="#4b6360">Luma Genie</text>
+
+  <line x1="267" y1="115" x2="287" y2="115" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+  <rect x="290" y="70" width="110" height="90" rx="10" fill="#f59e0b" opacity=".12" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="345" y="107" text-anchor="middle" font-size="22">📥</text>
+  <text x="345" y="126" text-anchor="middle" font-size="11" font-weight="600" fill="#b45309">Download GLB</text>
+  <text x="345" y="141" text-anchor="middle" font-size="9"  fill="#4b6360">GLB / OBJ / FBX</text>
+  <text x="345" y="152" text-anchor="middle" font-size="9"  fill="#4b6360">with textures</text>
+
+  <!-- Down arrow from GLB to Blender -->
+  <line x1="345" y1="162" x2="345" y2="195" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+  <!-- Row 2 (right-to-left direction hint) -->
+  <rect x="290" y="198" width="110" height="90" rx="10" fill="#f59e0b" opacity=".12" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="345" y="236" text-anchor="middle" font-size="22">🐂</text>
+  <text x="345" y="255" text-anchor="middle" font-size="11" font-weight="600" fill="#b45309">Blender</text>
+  <text x="345" y="270" text-anchor="middle" font-size="9"  fill="#4b6360">Optional cleanup</text>
+  <text x="345" y="281" text-anchor="middle" font-size="9"  fill="#4b6360">UV / topology fix</text>
+
+  <line x1="287" y1="243" x2="267" y2="243" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+  <rect x="155" y="198" width="110" height="90" rx="10" fill="#10b981" opacity=".12" stroke="#10b981" stroke-width="1.5"/>
+  <text x="210" y="236" text-anchor="middle" font-size="22">📦</text>
+  <text x="210" y="255" text-anchor="middle" font-size="11" font-weight="600" fill="#065f46">GLTF Export</text>
+  <text x="210" y="270" text-anchor="middle" font-size="9"  fill="#4b6360">gltf-transform</text>
+  <text x="210" y="281" text-anchor="middle" font-size="9"  fill="#4b6360">Draco compress</text>
+
+  <line x1="152" y1="243" x2="132" y2="243" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+  <rect x="20"  y="198" width="110" height="90" rx="10" fill="#ec4899" opacity=".12" stroke="#ec4899" stroke-width="1.5"/>
+  <text x="75"  y="236" text-anchor="middle" font-size="22">⚛️</text>
+  <text x="75"  y="255" text-anchor="middle" font-size="11" font-weight="600" fill="#be185d">Three.js / R3F</text>
+  <text x="75"  y="270" text-anchor="middle" font-size="9"  fill="#4b6360">Load with</text>
+  <text x="75"  y="281" text-anchor="middle" font-size="9"  fill="#4b6360">GLTFLoader</text>
+
+  <!-- Right side: AI texture + animation -->
+  <rect x="470" y="70" width="140" height="90" rx="10" fill="#0d9488" opacity=".10" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="540" y="107" text-anchor="middle" font-size="22">🎨</text>
+  <text x="540" y="126" text-anchor="middle" font-size="11" font-weight="600" fill="#0d9488">AI Textures</text>
+  <text x="540" y="141" text-anchor="middle" font-size="9"  fill="#4b6360">Stable Diffusion</text>
+  <text x="540" y="152" text-anchor="middle" font-size="9"  fill="#4b6360">PBR maps</text>
+
+  <rect x="470" y="198" width="140" height="90" rx="10" fill="#7c3aed" opacity=".10" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="540" y="236" text-anchor="middle" font-size="22">🏃</text>
+  <text x="540" y="255" text-anchor="middle" font-size="11" font-weight="600" fill="#7c3aed">AI Animation</text>
+  <text x="540" y="270" text-anchor="middle" font-size="9"  fill="#4b6360">Mixamo auto-rig</text>
+  <text x="540" y="281" text-anchor="middle" font-size="9"  fill="#4b6360">AnimationMixer</text>
+
+  <!-- Deploy -->
+  <rect x="660" y="130" width="130" height="90" rx="10" fill="#10b981" opacity=".14" stroke="#10b981" stroke-width="2"/>
+  <text x="725" y="167" text-anchor="middle" font-size="26">🚀</text>
+  <text x="725" y="188" text-anchor="middle" font-size="12" font-weight="600" fill="#065f46">Deploy</text>
+  <text x="725" y="203" text-anchor="middle" font-size="9"  fill="#4b6360">GitHub Pages</text>
+  <text x="725" y="214" text-anchor="middle" font-size="9"  fill="#4b6360">Vercel / Netlify</text>
+
+  <!-- Connect textures + animation to deploy -->
+  <line x1="612" y1="115" x2="645" y2="160" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+  <line x1="612" y1="243" x2="645" y2="215" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+
+  <!-- Connect Three.js to deploy -->
+  <path d="M75,198 Q75,175 660,175" fill="none" stroke="#0d9488" stroke-width="1.5" marker-end="url(#arr2)"/>
+
+  <!-- Optional label -->
+  <text x="490" y="62" text-anchor="middle" font-size="9" fill="#7a9e9b" font-style="italic">optional enrichment</text>
+  <line x1="470" y1="65" x2="614" y2="65" stroke="#7a9e9b" stroke-width="1" stroke-dasharray="3,2"/>
+</svg>

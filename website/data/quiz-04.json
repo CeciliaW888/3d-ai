@@ -1,0 +1,78 @@
+{
+  "day": 4,
+  "title": "Three.js Fundamentals",
+  "questions": [
+    {
+      "question": "What does Three.js sit on top of in the browser?",
+      "options": [
+        "CSS 3D transforms",
+        "Canvas 2D API",
+        "WebGL",
+        "SVG"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "Three.js is a high-level abstraction over WebGL, the browser's low-level GPU API. It handles all the shader code, buffer management, and draw calls so you don't have to."
+    },
+    {
+      "question": "Which class creates a rectangular box shape in Three.js?",
+      "options": [
+        "BoxMesh",
+        "CubeGeometry",
+        "BoxGeometry",
+        "RectGeometry"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "BoxGeometry creates a rectangular cuboid. The naming pattern is consistent: SphereGeometry, CylinderGeometry, PlaneGeometry, etc."
+    },
+    {
+      "question": "A Three.js Mesh is made up of which two parts?",
+      "options": [
+        "Scene and Camera",
+        "Geometry and Material",
+        "Renderer and Light",
+        "Texture and Shader"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "A Mesh = Geometry (the shape / vertices) + Material (how it looks / color / lighting response). Both are required."
+    },
+    {
+      "question": "What is the purpose of requestAnimationFrame in a Three.js animation loop?",
+      "options": [
+        "It loads 3D models asynchronously",
+        "It schedules the render function to run before each screen repaint, synchronized to the display refresh rate",
+        "It increases the renderer resolution",
+        "It saves the current frame as a PNG"
+      ],
+      "correct": 1,
+      "answer": 1,
+      "explanation": "requestAnimationFrame calls your function ~60 times per second, synchronized with the monitor's refresh rate. This produces smooth animation and lets the browser pause it when the tab is hidden."
+    },
+    {
+      "question": "Which material type ignores all lights in the scene and always displays its full color?",
+      "options": [
+        "MeshStandardMaterial",
+        "MeshPhongMaterial",
+        "MeshBasicMaterial",
+        "MeshLambertMaterial"
+      ],
+      "correct": 2,
+      "answer": 2,
+      "explanation": "MeshBasicMaterial is unlit — it renders flat color regardless of lights. MeshStandardMaterial, MeshPhongMaterial, and MeshLambertMaterial all require lights to be visible."
+    },
+    {
+      "question": "What file format does GLTFLoader load, and why is it preferred for the web?",
+      "options": [
+        ".fbx — because Autodesk tools export it natively",
+        ".obj — because it is plain text and easy to parse",
+        ".blend — because Blender is free",
+        ".glb — because it is a compact binary format with textures embedded, designed for efficient web delivery"
+      ],
+      "correct": 3,
+      "answer": 3,
+      "explanation": "GLB is the binary form of GLTF. It embeds meshes, textures, and animations into a single file, making it fast to download and parse. GLTF is the open standard for 3D on the web."
+    }
+  ]
+}

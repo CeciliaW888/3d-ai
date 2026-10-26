@@ -1,0 +1,130 @@
+<section class="module" id="module-9">
+  <div class="module-inner">
+
+    <h2>AI Texture Generation</h2>
+    <p>A 3D mesh with no texture is a grey blob. Textures are what give surfaces their identity: the roughness of concrete, the sheen of polished metal, the grain of wood. Today you learn the PBR texture system and how to apply it in Three.js.</p>
+
+    <h3>The PBR Texture Set</h3>
+    <p>Modern 3D rendering uses Physically Based Rendering (PBR). Instead of one "color image", you use a set of maps - each encoding a different physical property:</p>
+
+    <div class="callout-accent">
+      <strong>Albedo (Color Map)</strong> - The base color with no lighting baked in. Keep it free of highlights and shadows - Three.js computes those at runtime.
+    </div>
+
+    <div class="callout-info">
+      <strong>Normal Map</strong> - Encodes surface micro-detail (scratches, bumps, grout lines) as pixel colors. Fakes geometry without adding triangles. The single biggest visual quality improvement with zero performance cost.
+    </div>
+
+    <div class="callout-accent">
+      <strong>Roughness Map</strong> - White pixels = rough/matte (diffuse scatter). Black pixels = smooth/specular (mirror-like). Controls how glossy the surface is.
+    </div>
+
+    <div class="callout-info">
+      <strong>Metalness Map</strong> - White = metallic (gold, steel). Black = non-metal (plastic, wood). Together with roughness this defines how the surface interacts with light.
+    </div>
+
+    <div class="callout-info">
+      <strong>Ambient Occlusion (AO) Map</strong> - Darkens crevices and contact points to simulate how ambient light gets blocked. Makes 3D feel grounded and real.
+    </div>
+
+    <h3>Free PBR Textures: Polyhaven</h3>
+    <p><a href="https://polyhaven.com/" target="_blank" rel="noopener">polyhaven.com</a> is a library of CC0 (public domain) PBR texture sets. Every asset is free for commercial use, no attribution required. Download at 1K resolution for web use - 2K if you need close-up detail. Each download is a zip with all the maps pre-separated and correctly labeled.</p>
+
+    <h3>Applying PBR in Three.js</h3>
+    <p>Use <code>MeshStandardMaterial</code> - the PBR-ready material. Use one <code>TextureLoader</code> instance and call <code>.load()</code> per map.</p>
+
+    <div class="callout-warning">
+      <strong>Color space matters:</strong> Set <code>colorSpace = THREE.SRGBColorSpace</code> on the albedo map ONLY. Normal, roughness, metalness, and AO maps encode data values - not color - so they must stay in linear space. Getting this wrong makes the model look washed out or too dark.
+    </div>
+
+    <pre><code class="language-js">import * as THREE from 'three';
+
+const loader = new THREE.TextureLoader();
+
+// Albedo: needs sRGB color space
+const albedoMap = loader.load('./textures/brick_albedo_1k.jpg');
+albedoMap.colorSpace = THREE.SRGBColorSpace;
+
+// Data maps: stay in linear space (default)
+const normalMap    = loader.load('./textures/brick_normal_1k.jpg');
+const roughnessMap = loader.load('./textures/brick_roughness_1k.jpg');
+const aoMap        = loader.load('./textures/brick_ao_1k.jpg');
+
+// Set tiling on all maps
+[albedoMap, normalMap, roughnessMap, aoMap].forEach(t => {
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(2, 2);
+});
+
+const material = new THREE.MeshStandardMaterial({
+  map:             albedoMap,
+  normalMap:       normalMap,
+  normalScale:     new THREE.Vector2(1, 1),
+  roughnessMap:    roughnessMap,
+  roughness:       1.0,
+  aoMap:           aoMap,
+  aoMapIntensity:  1.0
+});
+
+const sphere = new THREE.Mesh(
+  new THREE.SphereGeometry(1, 64, 64),
+  material
+);
+// AO map needs a second UV attribute
+sphere.geometry.setAttribute('uv2', sphere.geometry.attributes.uv);
+scene.add(sphere);</code></pre>
+
+    <h3>AI Texture Generation Tools</h3>
+    <p>When a texture doesn't exist in any library, AI generation is the answer:</p>
+
+    <div class="step-card">
+      <span class="step-number">1</span>
+      <div><strong>Stable Diffusion (tiling mode)</strong> - Use "seamless tileable texture" in your prompt. Tools like AUTOMATIC1111 or ComfyUI support tiling output. Then use a normal map generator (normalmap.online) to derive the remaining maps.</div>
+    </div>
+    <div class="step-card">
+      <span class="step-number">2</span>
+      <div><strong>Materialize (free)</strong> - Feed it any diffuse image and it auto-derives normal, roughness, metalness, and AO maps using image processing. No AI cost, works offline.</div>
+    </div>
+    <div class="step-card">
+      <span class="step-number">3</span>
+      <div><strong>Adobe Substance 3D Sampler</strong> - Photograph any material and AI converts it to a full PBR set. The professional option - produces best results but requires a subscription.</div>
+    </div>
+
+    <h3>Quick Knowledge Check</h3>
+
+    <div class="quiz-card"
+         data-correct="0"
+         data-explanation-0="Correct! The albedo/color map encodes actual colors for display and must be interpreted in sRGB. All other maps store data values (directions, grayscale intensity) and must remain in linear space to avoid incorrect shading."
+         data-explanation-1="You should NOT set sRGB on the normal map - it stores direction vectors encoded as colors, not display colors. Setting sRGB on it causes subtle but incorrect shading."
+         data-explanation-2="The roughness map stores grayscale intensity values, not display colors. Setting sRGB on it would cause incorrect roughness interpretation."
+         data-explanation-3="All maps need the same wrapS/wrapT setting for consistent tiling, not the same color space.">
+      <p class="quiz-q">You are loading a PBR texture set with albedo, normal, roughness, and AO maps. On which map(s) should you set <code>colorSpace = THREE.SRGBColorSpace</code>?</p>
+      <div class="quiz-opts">
+        <button class="quiz-option">Only the albedo / color map</button>
+        <button class="quiz-option">Only the normal map</button>
+        <button class="quiz-option">Only the roughness map</button>
+        <button class="quiz-option">All maps need the same color space setting</button>
+      </div>
+    </div>
+
+    <div class="quiz-card"
+         data-correct="1"
+         data-explanation-0="The albedo map is the base color - it doesn't control surface bumpiness or micro-detail."
+         data-explanation-1="Correct! The normal map encodes surface micro-detail as XYZ directions stored in RGB channels. It creates the illusion of fine geometry (bumps, scratches, grooves) without adding any triangles."
+         data-explanation-2="The roughness map controls glossiness (how specular vs diffuse the surface is), not surface detail bumps."
+         data-explanation-3="The AO map darkens crevices for ambient occlusion - it does not add the appearance of bumps or surface detail.">
+      <p class="quiz-q">Which PBR map makes a flat polygon appear to have surface bumps, scratches, and micro-detail without adding any extra triangles?</p>
+      <div class="quiz-opts">
+        <button class="quiz-option">Albedo map</button>
+        <button class="quiz-option">Normal map</button>
+        <button class="quiz-option">Roughness map</button>
+        <button class="quiz-option">AO map</button>
+      </div>
+    </div>
+
+    <div class="callout-accent">
+      <strong>Quick tip - tiling scale:</strong> The <code>repeat.set(2, 2)</code> call tiles the texture 2x in each direction. For large architectural surfaces (a wall, a floor) you might use <code>repeat.set(8, 8)</code> to avoid the texture looking stretched. For a small object like a gem, keep it at <code>(1, 1)</code>.
+    </div>
+
+  </div>
+</section>

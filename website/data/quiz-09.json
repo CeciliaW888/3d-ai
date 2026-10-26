@@ -1,0 +1,61 @@
+{
+  "day": 9,
+  "title": "AI Texture Generation",
+  "questions": [
+    {
+      "question": "You load a PBR texture set into Three.js. On which map should you set colorSpace = THREE.SRGBColorSpace?",
+      "options": [
+        "All maps - they all need sRGB for correct rendering",
+        "Only the albedo / color map",
+        "Normal and roughness maps - they are the most important",
+        "AO map only - it affects the most visible part of the surface"
+      ],
+      "answer": 1,
+      "explanation": "The albedo map encodes display colors and must be interpreted in sRGB. Normal, roughness, metalness, and AO maps store data values (not display colors) and must stay in linear space. Setting sRGB on data maps causes incorrect shading."
+    },
+    {
+      "question": "A flat polygon with a normal map applied appears to have detailed bumps, grooves, and scratches. What is the actual polygon count of this surface?",
+      "options": [
+        "Much higher - the normal map adds geometry at render time",
+        "The same as the base mesh - normal maps only affect how light hits the surface, not the geometry",
+        "It depends on the texture resolution - a 4K normal map adds more polygons",
+        "Zero - the normal map replaces the mesh entirely"
+      ],
+      "answer": 1,
+      "explanation": "Normal maps do not add geometry. They encode surface direction vectors that tell the lighting model how to shade each pixel as if the surface were bumped. The polygon count stays exactly the same as the underlying mesh."
+    },
+    {
+      "question": "In a MeshStandardMaterial, you set roughness: 0.0 and metalness: 1.0 with no maps. What will the sphere look like?",
+      "options": [
+        "Completely invisible - these settings cancel each other out",
+        "Matte black with no reflections",
+        "A perfectly smooth metallic mirror reflecting the environment",
+        "A rough, diffuse grey surface"
+      ],
+      "answer": 2,
+      "explanation": "roughness: 0.0 means a perfectly smooth surface (maximum specularity). metalness: 1.0 means fully metallic. The combination produces a mirror-like metal sphere that reflects the environment map (or appears black without one)."
+    },
+    {
+      "question": "You apply a PBR brick texture to a large wall plane and set repeat.set(1, 1). The bricks look stretched and enormous. What is the correct fix?",
+      "options": [
+        "Increase the mesh polygon count to give the texture more geometry to attach to",
+        "Increase the repeat value - for example repeat.set(8, 4) to tile the texture more times across the surface",
+        "Switch to a MeshBasicMaterial which handles large surfaces better",
+        "Set wrapS and wrapT to THREE.ClampToEdgeWrapping"
+      ],
+      "answer": 1,
+      "explanation": "repeat.set(1, 1) shows one tile of the texture across the entire surface. For a large wall you want many repetitions to get a realistic brick scale. repeat.set(8, 4) would tile 8 times horizontally and 4 times vertically. You must also set wrapS = wrapT = THREE.RepeatWrapping."
+    },
+    {
+      "question": "You generate a seamless texture with Stable Diffusion for a stone wall. It tiles well but the surface looks uniformly lit with no depth or contact shadows. Which PBR map would you add first to fix this?",
+      "options": [
+        "Roughness map - increasing roughness adds depth",
+        "Metalness map - metallic surfaces show more depth variation",
+        "Ambient occlusion (AO) map - it darkens crevices to simulate light blocking",
+        "Height map - it physically displaces the vertices"
+      ],
+      "answer": 2,
+      "explanation": "The AO map encodes how much ambient light reaches each part of the surface - crevices and recessed areas are darkened. This single map dramatically increases the perceived depth and grounding of the surface. A roughness map changes glossiness, not depth. A height map is too expensive for real-time use."
+    }
+  ]
+}

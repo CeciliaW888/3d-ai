@@ -1,0 +1,64 @@
+<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif">
+  <rect width="800" height="300" fill="#f0f7f6" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-size="15" font-weight="700" fill="#1a2e2c">3D Rendering Pipeline</text>
+
+  <!-- Arrow helper -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#0d9488"/>
+    </marker>
+  </defs>
+
+  <!-- Boxes -->
+  <!-- 1. 3D Scene -->
+  <rect x="20" y="90" width="120" height="120" rx="10" fill="#0d9488" opacity=".15" stroke="#0d9488" stroke-width="2"/>
+  <text x="80" y="138" text-anchor="middle" font-size="28">🧊</text>
+  <text x="80" y="160" text-anchor="middle" font-size="12" font-weight="600" fill="#0d9488">3D Scene</text>
+  <text x="80" y="175" text-anchor="middle" font-size="10" fill="#4b6360">Objects, Lights,</text>
+  <text x="80" y="188" text-anchor="middle" font-size="10" fill="#4b6360">Camera</text>
+
+  <!-- Arrow 1 -->
+  <line x1="142" y1="150" x2="168" y2="150" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 2. Vertex Shader -->
+  <rect x="170" y="90" width="120" height="120" rx="10" fill="#7c3aed" opacity=".12" stroke="#7c3aed" stroke-width="2"/>
+  <text x="230" y="138" text-anchor="middle" font-size="26">📐</text>
+  <text x="230" y="160" text-anchor="middle" font-size="12" font-weight="600" fill="#7c3aed">Vertex Shader</text>
+  <text x="230" y="175" text-anchor="middle" font-size="10" fill="#4b6360">Transforms 3D</text>
+  <text x="230" y="188" text-anchor="middle" font-size="10" fill="#4b6360">positions to 2D</text>
+
+  <!-- Arrow 2 -->
+  <line x1="292" y1="150" x2="318" y2="150" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 3. Rasterization -->
+  <rect x="320" y="90" width="120" height="120" rx="10" fill="#f59e0b" opacity=".12" stroke="#f59e0b" stroke-width="2"/>
+  <text x="380" y="138" text-anchor="middle" font-size="26">🔲</text>
+  <text x="380" y="160" text-anchor="middle" font-size="12" font-weight="600" fill="#b45309">Rasterization</text>
+  <text x="380" y="175" text-anchor="middle" font-size="10" fill="#4b6360">Converts triangles</text>
+  <text x="380" y="188" text-anchor="middle" font-size="10" fill="#4b6360">to pixels (fragments)</text>
+
+  <!-- Arrow 3 -->
+  <line x1="442" y1="150" x2="468" y2="150" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 4. Fragment Shader -->
+  <rect x="470" y="90" width="120" height="120" rx="10" fill="#ec4899" opacity=".12" stroke="#ec4899" stroke-width="2"/>
+  <text x="530" y="138" text-anchor="middle" font-size="26">🎨</text>
+  <text x="530" y="160" text-anchor="middle" font-size="12" font-weight="600" fill="#be185d">Fragment Shader</text>
+  <text x="530" y="175" text-anchor="middle" font-size="10" fill="#4b6360">Colors each pixel:</text>
+  <text x="530" y="188" text-anchor="middle" font-size="10" fill="#4b6360">textures, lighting</text>
+
+  <!-- Arrow 4 -->
+  <line x1="592" y1="150" x2="618" y2="150" stroke="#0d9488" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 5. Screen -->
+  <rect x="620" y="90" width="120" height="120" rx="10" fill="#10b981" opacity=".12" stroke="#10b981" stroke-width="2"/>
+  <text x="680" y="138" text-anchor="middle" font-size="26">🖥️</text>
+  <text x="680" y="160" text-anchor="middle" font-size="12" font-weight="600" fill="#065f46">Screen Output</text>
+  <text x="680" y="175" text-anchor="middle" font-size="10" fill="#4b6360">Final 2D image</text>
+  <text x="680" y="188" text-anchor="middle" font-size="10" fill="#4b6360">rendered per frame</text>
+
+  <!-- Note -->
+  <text x="400" y="260" text-anchor="middle" font-size="11" fill="#7a9e9b">GPU executes vertex shader once per vertex, fragment shader once per visible pixel — 60+ times per second</text>
+</svg>

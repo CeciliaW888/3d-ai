@@ -1,0 +1,69 @@
+<section class="module" id="module-1">
+  <h2>Day 1: How 3D Works — Meshes, Materials &amp; Lighting</h2>
+
+  <div class="callout-accent">
+    <strong>Core insight:</strong> Everything in 3D — a spaceship, a coffee mug, a character — is just a collection of triangles with color and lighting math applied to each pixel.
+    Once you understand that, the whole field clicks.
+  </div>
+
+  <h3>The Building Blocks: Vertices, Edges &amp; Faces</h3>
+  <p>Every 3D object is a <strong>mesh</strong> — a network of points in 3D space connected into polygons.</p>
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <div><strong>Vertex</strong> — a single point in 3D space with X, Y, Z coordinates (e.g. <code>[1.0, 0.5, -2.0]</code>).</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <div><strong>Edge</strong> — a line connecting two vertices. Defines the wireframe skeleton of the object.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <div><strong>Face / Triangle</strong> — three vertices connected into a polygon. GPUs render <em>triangles</em> exclusively; quads (4-sided faces) are split before rendering.</div>
+  </div>
+
+  <h3>Materials &amp; PBR</h3>
+  <p>A material tells the renderer how a surface looks under light. Modern 3D uses <strong>Physically Based Rendering (PBR)</strong> — simulating real-world optics with a few key properties:</p>
+  <ul>
+    <li><strong>Albedo</strong> — base color, what the surface looks like under pure white light</li>
+    <li><strong>Roughness</strong> — 0 = mirror, 1 = chalk. Controls how sharp reflections are</li>
+    <li><strong>Metalness</strong> — 0 = plastic/ceramic, 1 = bare metal. Changes how color and reflections behave</li>
+    <li><strong>Normal map</strong> — a texture that fakes surface detail (bumps, scratches) without adding polygons</li>
+  </ul>
+
+  <h3>Lighting</h3>
+  <p>Without lights, PBR materials render black. Three main light types:</p>
+  <ul>
+    <li><strong>Directional</strong> — parallel rays, like the sun. Set a direction, not a position</li>
+    <li><strong>Point</strong> — emits equally in all directions from a point, like a light bulb</li>
+    <li><strong>Spot</strong> — cone-shaped beam with falloff, like a flashlight</li>
+  </ul>
+  <div class="callout-info">
+    <strong>Ambient light</strong> is a flat base brightness added to everything in the scene — it prevents completely dark shadows.
+    Use it sparingly; it flattens the appearance of depth.
+  </div>
+
+  <h3>UV Mapping</h3>
+  <p>UV mapping is how 2D textures "wrap" onto 3D surfaces.
+  U and V are the horizontal and vertical coordinates of the texture (like X and Y, but for image space).
+  Every vertex also stores a UV coordinate telling the renderer which part of the texture image to sample at that point.</p>
+
+  <div class="quiz-card" data-correct="1" data-explanation-0="A pixel is a 2D image element. Vertices are 3D points." data-explanation-1="Correct! A vertex is a point in 3D space — the fundamental building block of geometry." data-explanation-2="A face (polygon) is formed by connecting multiple vertices, not the other way around." data-explanation-3="Normals are direction vectors attached to vertices, but they are not what defines a vertex itself.">
+    <p class="quiz-question">What is a vertex in 3D graphics?</p>
+    <ul class="quiz-options">
+      <li>A single pixel in a texture image</li>
+      <li>A point in 3D space with X, Y, Z coordinates</li>
+      <li>A polygon made of three points</li>
+      <li>A direction vector indicating surface orientation</li>
+    </ul>
+  </div>
+
+  <div class="quiz-card" data-correct="2" data-explanation-0="Albedo is base color, not roughness." data-explanation-1="Normal maps fake surface detail but are not the same as roughness." data-explanation-2="Correct! Roughness ranges from 0 (mirror-smooth) to 1 (diffuse/chalky), controlling specular sharpness." data-explanation-3="Metalness controls the reflective behavior of metals vs. dielectrics, not surface texture roughness.">
+    <p class="quiz-question">In PBR materials, what does the roughness property control?</p>
+    <ul class="quiz-options">
+      <li>The base color of the surface</li>
+      <li>How bumpy the surface looks</li>
+      <li>How sharp or blurry reflections appear (0 = mirror, 1 = chalk)</li>
+      <li>Whether the surface behaves like a metal or plastic</li>
+    </ul>
+  </div>
+</section>

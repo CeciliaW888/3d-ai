@@ -1,0 +1,108 @@
+<section class="module" id="module-20">
+  <h2>Day 20 - Full AI-Assisted 3D Workflow</h2>
+
+  <div class="callout-accent">
+    <strong>Today is a synthesis day.</strong> You will see how all the tools from this course form a single coherent pipeline - and learn a decision framework for choosing the right tool at each stage.
+  </div>
+
+  <h3>The Six-Stage Pipeline</h3>
+  <p>Every 3D web project moves through these stages. AI tools compress each one from hours to minutes.</p>
+
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <div>
+      <strong>Generate</strong>
+      <p><em>Days 3, 8</em> - Meshy.ai or Tripo3D. Turn a text prompt or reference image into a 3D mesh in 2-5 minutes. This replaces hours of manual modeling.</p>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <div>
+      <strong>Refine</strong>
+      <p><em>Day 19</em> - Blender. Apply Decimate to reach web-friendly polygon counts (2,000-10,000 faces). Fix UV maps. Apply transforms. Pack textures.</p>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <div>
+      <strong>Texture</strong>
+      <p><em>Day 9</em> - AI texture tools like Leonardo.ai or Stable Diffusion. Generate tileable PBR textures from text descriptions. Apply in Blender's material editor.</p>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">4</span>
+    <div>
+      <strong>Animate</strong>
+      <p><em>Day 10</em> - Mixamo. Upload your mesh, auto-rig in 30 seconds, pick from 2,000+ motion-capture animations. Download FBX with Skin, re-export as animated GLB.</p>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">5</span>
+    <div>
+      <strong>Render on the Web</strong>
+      <p><em>Days 4-5, 11-12, 15</em> - Three.js or React Three Fiber. Load the optimized GLB, apply lighting, add interactivity. Apply performance patterns from Day 18.</p>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">6</span>
+    <div>
+      <strong>Deploy</strong>
+      <p>GitHub Pages for static sites (push, enable Pages, done). Vercel for React/Vite apps (connect repo, auto-deploy). Run gltf-transform before deploying.</p>
+    </div>
+  </div>
+
+  <h3>Case Study: 3D Portfolio Website</h3>
+  <p>Here is the full pipeline for building an animated developer character in a portfolio hero section:</p>
+
+  <div class="callout-info">
+    <strong>Total time with AI tools: ~2 hours</strong><br>
+    Step 1: Meshy prompt "cartoon developer in hoodie, T-pose, game-ready" (15 min)<br>
+    Step 2: Blender - Decimate to 5k faces, apply transforms, export GLB (20 min)<br>
+    Step 3: Mixamo - auto-rig, pick Wave + Idle animations, re-export (10 min)<br>
+    Step 4: gltf-transform optimize to under 3 MB (5 min)<br>
+    Step 5: R3F - useGLTF + useAnimations, particle background (45 min)<br>
+    Step 6: Vercel deploy from GitHub (5 min)
+  </div>
+
+  <h3>Decision Framework</h3>
+  <p>Use this quick guide to choose the right tool at each decision point:</p>
+
+  <div class="quiz-card"
+       data-correct="1"
+       data-explanation-0="Tripo3D is faster but Meshy produces higher-quality organic shapes, especially with image references."
+       data-explanation-1="Correct! Meshy.ai excels at organic, character-style shapes and supports image-to-3D with excellent quality."
+       data-explanation-2="Blender from scratch would take hours and requires manual modeling skill."
+       data-explanation-3="Spline is for interactive web scenes, not model generation from images.">
+    <p class="quiz-q">Your client sends you a photo of a ceramic vase and asks for a 3D version for their product page. Which tool should you start with?</p>
+    <div class="quiz-opts">
+      <button class="quiz-option">Tripo3D - faster turnaround</button>
+      <button class="quiz-option">Meshy.ai image-to-3D - best quality for organic objects</button>
+      <button class="quiz-option">Model it from scratch in Blender</button>
+      <button class="quiz-option">Design it in Spline's editor</button>
+    </div>
+  </div>
+
+  <div class="quiz-card"
+       data-correct="3"
+       data-explanation-0="Mixamo is excellent for humanoids but cannot auto-rig non-humanoid shapes like animals or vehicles."
+       data-explanation-1="Spline has basic animation tools but is not suited for complex character animation workflows."
+       data-explanation-2="gltf-transform handles file optimization, not animation."
+       data-explanation-3="Correct! Mixamo's Auto-Rigger requires a human-shaped mesh with recognizable limb proportions to work correctly.">
+    <p class="quiz-q">Which limitation should you be aware of before sending a model to Mixamo?</p>
+    <div class="quiz-opts">
+      <button class="quiz-option">Mixamo only supports FBX input, not GLB</button>
+      <button class="quiz-option">Spline animations are more compatible with Three.js</button>
+      <button class="quiz-option">gltf-transform must be run before uploading</button>
+      <button class="quiz-option">Mixamo only works well with humanoid meshes</button>
+    </div>
+  </div>
+
+  <div class="callout-warning">
+    <strong>AI as Accelerator:</strong> AI tools handle the tedious parts - mesh generation, auto-rigging, texture creation. Human judgment is still required for deciding what to build, adjusting what AI gets wrong, and writing the rendering code.
+  </div>
+</section>

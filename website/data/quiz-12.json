@@ -1,0 +1,66 @@
+{
+  "day": 12,
+  "title": "3D for Web Apps: Configurators & Viewers",
+  "questions": [
+    {
+      "question": "Why must you call node.material.clone() before changing a material property on a loaded GLTF mesh?",
+      "options": [
+        "Multiple meshes often share the same material instance, so modifying one without cloning changes all of them",
+        "Three.js requires cloned materials to work with AnimationMixer",
+        "Loaded materials are read-only and will throw an error if you modify them directly",
+        "clone() initializes the material's PBR properties"
+      ],
+      "correct": 0,
+      "explanation": "GLTF models frequently share material instances across meshes to reduce memory. Modifying a shared material changes every mesh using it. Cloning creates an independent copy safe to modify.",
+      "answer": 0
+    },
+    {
+      "question": "In a React Three Fiber configurator, where should the currently selected color be stored?",
+      "options": [
+        "As a CSS custom property on the canvas element",
+        "In React useState so R3F re-renders the material when it changes",
+        "In a global Three.js material object modified directly",
+        "In localStorage so it persists across page refreshes"
+      ],
+      "correct": 1,
+      "explanation": "Storing selection in useState integrates with React's reconciler. When state changes, R3F re-renders only the affected components, and the meshStandardMaterial receives the new color prop automatically.",
+      "answer": 1
+    },
+    {
+      "question": "What does adding <Environment preset=\"studio\" /> from @react-three/drei provide?",
+      "options": [
+        "Post-processing bloom and color grading",
+        "A set of directional lights arranged in a studio configuration",
+        "A studio background image visible behind the model",
+        "HDR panoramic lighting that reflective and glossy surfaces sample for realistic reflections"
+      ],
+      "correct": 3,
+      "explanation": "Environment wraps the scene in an HDR image map. Metallic and glossy meshStandardMaterial surfaces sample it for their reflection color, making materials look photorealistic without manually placing lights.",
+      "answer": 3
+    },
+    {
+      "question": "When would you choose @google/model-viewer over a custom React Three Fiber configurator?",
+      "options": [
+        "When you need full material and color switching controlled by React state",
+        "When the model has skeletal animations that must blend between clips",
+        "When you want a simple drop-in viewer on a plain HTML page with no build step",
+        "When you need GSAP ScrollTrigger integration for scroll-driven animation"
+      ],
+      "correct": 2,
+      "explanation": "model-viewer is a single web component requiring one script tag and one custom element. It provides orbit controls, auto-rotate, environment lighting, and AR mode out of the box \u2014 ideal for product pages that need a viewer but not a full configurator.",
+      "answer": 2
+    },
+    {
+      "question": "What is the purpose of calling useGLTF.preload('/models/product.glb') at module scope?",
+      "options": [
+        "It validates that the GLB file format is correct before mounting",
+        "It caches the model in the browser's Service Worker",
+        "It prevents the model from being garbage collected",
+        "It starts downloading the model before the component mounts, reducing perceived loading time"
+      ],
+      "correct": 3,
+      "explanation": "Calling preload at module scope triggers the download as soon as the module is imported \u2014 before the component tree mounts. By the time Suspense asks for the model, it may already be partially or fully downloaded.",
+      "answer": 3
+    }
+  ]
+}

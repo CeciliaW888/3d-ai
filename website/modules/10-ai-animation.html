@@ -1,0 +1,160 @@
+<section class="module" id="module-10">
+  <h2>Day 10: AI Animation — Mixamo &amp; Beyond</h2>
+
+  <p>
+    Still 3D is impressive. Animated 3D is alive.
+    Today you learn how skeletal animation works, how Mixamo turns any humanoid mesh into a
+    walking, running character in minutes, and how Three.js's <code>AnimationMixer</code> plays
+    those animations in the browser.
+  </p>
+
+  <div class="callout-accent">
+    <strong>Key insight:</strong> The visible mesh never moves on its own.
+    It is skinned to a hidden skeleton (armature) made of bones.
+    Animate the bones — the mesh follows.
+  </div>
+
+  <h3>How Skeletal Animation Works</h3>
+  <p>
+    An <strong>armature</strong> is a hierarchy of <strong>bones</strong>.
+    Each bone has a parent (the spine is parent to the ribs) so rotating one joint automatically
+    carries all its children — exactly like a real body.
+    <strong>Skinning</strong> binds each mesh vertex to nearby bones with influence weights, so a
+    knee vertex smoothly deforms as both the thigh and shin bones rotate.
+    <strong>Keyframes</strong> record bone transforms at specific times; the engine interpolates
+    the frames between them to produce fluid motion.
+  </p>
+
+  <h3>The Mixamo Workflow</h3>
+
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <div>
+      <strong>Upload your mesh</strong> — FBX or OBJ, humanoid in T-pose.
+      Meshes from Meshy.ai or Tripo3D work great.
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <div>
+      <strong>Auto-rig</strong> — Place five body markers (head, chin, wrists, groin, knees).
+      Mixamo AI generates a full ~65-bone rig in seconds.
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <div>
+      <strong>Pick an animation</strong> — Search thousands of motion-captured clips.
+      Preview them live on your character. Adjust Overdrive and Arm Space sliders.
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">4</span>
+    <div>
+      <strong>Download GLB</strong> — Choose "FBX for Unity" or GLB.
+      Check "Without Skin" if you only want the animation data.
+    </div>
+  </div>
+
+  <h3>AnimationMixer in Three.js</h3>
+  <p>
+    Three.js uses three classes to drive animation.
+    An <code>AnimationClip</code> is a named set of keyframe tracks (one per bone property).
+    An <code>AnimationMixer</code> is the playback engine — one per character.
+    An <code>AnimationAction</code> is the handle you call <code>.play()</code> on.
+    Call <code>mixer.update(delta)</code> every frame to advance time.
+  </p>
+
+  <pre><code class="language-js">import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+let mixer;
+let idleAction;
+let walkAction;
+const clock = new THREE.Clock();
+
+const loader = new GLTFLoader();
+loader.load('/models/character.glb', (gltf) => {
+  const model = gltf.scene;
+  scene.add(model);
+
+  mixer = new THREE.AnimationMixer(model);
+
+  const idleClip = THREE.AnimationClip.findByName(gltf.animations, 'Idle');
+  const walkClip = THREE.AnimationClip.findByName(gltf.animations, 'Walking');
+
+  idleAction = mixer.clipAction(idleClip);
+  walkAction = mixer.clipAction(walkClip);
+  idleAction.play();
+});
+
+// Smooth transition on keypress
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'w' && mixer) {
+    idleAction.crossFadeTo(walkAction, 0.5, false);
+    walkAction.play();
+  }
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  const delta = clock.getDelta(); // seconds since last frame
+  if (mixer) mixer.update(delta);
+  renderer.render(scene, camera);
+}
+animate();</code></pre>
+
+  <div class="callout-warning">
+    <strong>Common mistake:</strong> Passing <code>clock.getElapsedTime()</code> to
+    <code>mixer.update()</code> instead of <code>clock.getDelta()</code> makes animations
+    run faster and faster until they become a blur. Always use <code>getDelta()</code>.
+  </div>
+
+  <h3>AI Motion Tools Beyond Mixamo</h3>
+  <p>
+    <strong>Cascadeur</strong> uses physics-based AI for any character shape — not just humanoids —
+    and auto-generates secondary motion like hair and clothing sway.
+    <strong>Move.ai</strong> captures motion from ordinary phone video using AI pose estimation,
+    no motion-capture suit needed.
+    Both export FBX/BVH that <code>AnimationMixer</code> can play.
+  </p>
+
+  <div class="callout-info">
+    <strong>Tip:</strong> Download multiple animations from Mixamo as separate GLBs, then merge
+    them into one file in Blender by importing each and using "Push Down" in the NLA editor.
+    Three.js will see all clips in <code>gltf.animations</code>.
+  </div>
+
+  <div class="quiz-card"
+    data-correct="2"
+    data-explanation-0="Skinning binds the mesh to the skeleton — it is not the name of the animation playback engine."
+    data-explanation-1="AnimationClip stores keyframe data but does not advance playback time."
+    data-explanation-2="Correct. AnimationMixer is the engine you call mixer.update(delta) on each frame to advance all active clips."
+    data-explanation-3="AnimationAction is the handle for one specific clip, obtained from mixer.clipAction(clip).">
+    <p class="quiz-question">Which Three.js class do you call <code>update(delta)</code> on every frame to advance skeletal animation?</p>
+    <ol class="quiz-options">
+      <li>AnimationSkin</li>
+      <li>AnimationClip</li>
+      <li>AnimationMixer</li>
+      <li>AnimationAction</li>
+    </ol>
+  </div>
+
+  <div class="quiz-card"
+    data-correct="1"
+    data-explanation-0="Keyframes record bone transforms at specific times — they are not the binding of mesh to skeleton."
+    data-explanation-1="Correct. Skinning is the process of assigning per-vertex bone influence weights so the mesh deforms with the skeleton."
+    data-explanation-2="The armature is the skeleton hierarchy itself, not the binding process."
+    data-explanation-3="Rigging broadly describes setting up a character for animation, but skinning specifically refers to the vertex weight binding.">
+    <p class="quiz-question">What term describes the process of assigning bone influence weights to mesh vertices?</p>
+    <ol class="quiz-options">
+      <li>Keyframing</li>
+      <li>Skinning</li>
+      <li>Armature</li>
+      <li>Rigging</li>
+    </ol>
+  </div>
+</section>

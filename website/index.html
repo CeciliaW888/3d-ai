@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D AI for the Web</title>
+  <meta name="description" content="Build AI-powered 3D experiences for websites, web apps, and games — in 21 days">
+  <meta name="theme-color" content="#0d9488">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="3D AI">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Framework CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    :root {
+      --accent:       #0d9488;
+      --accent-hover: #0f766e;
+      --accent-light: rgba(13,148,136,0.12);
+      --accent-muted: rgba(13,148,136,0.06);
+      --color-accent:       #0d9488;
+      --color-accent-hover: #0f766e;
+      --color-accent-light: rgba(13,148,136,0.12);
+      --color-accent-muted: rgba(13,148,136,0.06);
+      --color-text-secondary: #4b6360;
+      --color-text-muted: #7a9e9b;
+      --color-surface: #ffffff;
+      --color-border: #d1e8e6;
+      --accent-green: #4a7c59;
+      --accent-red:   #c86b5a;
+
+      --cream: #f0f7f6; --white: #ffffff; --border: #d1e8e6;
+      --shadow: rgba(0,0,0,0.07); --text-primary: #1a2e2c;
+      --text-secondary: #4b6360; --text-muted: #7a9e9b;
+      --radius: 12px; --max-w: 860px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --cream: #111e1d; --white: #1a2928; --border: #2a3e3c;
+        --shadow: rgba(0,0,0,0.3); --text-primary: #e0f0ee;
+        --text-secondary: #8ab5b1; --text-muted: #5a7e7a;
+      }
+      .hero { background: linear-gradient(135deg, var(--cream) 0%, #182826 100%) !important; }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--cream); color: var(--text-primary); line-height: 1.6; }
+
+    .tab-nav { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px var(--shadow); }
+    .tab-nav-inner { max-width: var(--max-w); margin: 0 auto; display: flex; overflow-x: auto; scrollbar-width: none; }
+    .tab-nav-inner::-webkit-scrollbar { display: none; }
+    .tab-btn { flex-shrink: 0; padding: 14px 20px; border: none; background: none; color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+    .tab-btn:hover { color: var(--text-primary); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 20px; }
+    main > .section { display: none; padding: 32px 0 64px; }
+    main > .section.active { display: block; }
+    .section-heading { font-family: 'Crimson Pro', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
+
+    .hero { background: linear-gradient(135deg, var(--cream) 0%, rgba(13,148,136,0.08) 100%); padding: 48px 20px 40px; text-align: center; }
+    .hero-emoji { font-size: 3.5rem; margin-bottom: 16px; }
+    .hero h1 { font-family: 'Crimson Pro', serif; font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 700; margin-bottom: 12px; }
+    .hero-subtitle { color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 20px; }
+    .hero-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 24px; }
+    .hero-tag { background: var(--accent-light); color: var(--accent); border: 1px solid rgba(13,148,136,0.2); border-radius: 20px; padding: 4px 14px; font-size: 0.85rem; font-weight: 500; }
+    .install-btn-hero { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 10px 24px; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: none; transition: background 0.2s; }
+    .install-btn-hero:hover { background: var(--accent-hover); }
+    .install-btn-hero.visible { display: inline-block; }
+
+    .progress-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px 24px; margin: 24px 20px 0; max-width: var(--max-w); margin-inline: auto; display: flex; align-items: center; gap: 24px; }
+    .progress-ring-wrap { flex-shrink: 0; position: relative; width: 90px; height: 90px; }
+    .progress-ring { transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: var(--border); stroke-width: 6; }
+    .ring-fg { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 232.5; stroke-dashoffset: 232.5; transition: stroke-dashoffset 0.5s ease; }
+    .progress-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .progress-ring-pct { font-size: 20px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .progress-ring-days { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .streak-wrap { flex: 1; min-width: 0; }
+    .streak-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .streak-title { font-size: 0.85rem; font-weight: 600; }
+    .streak-count { font-size: 0.8rem; color: var(--text-muted); }
+    .streak-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+    .streak-cell { height: 23px; border-radius: 3px; border: none; background: var(--cream); cursor: pointer; font-size: 10px; color: var(--text-muted); transition: background 0.15s; }
+    .streak-cell:hover { background: var(--accent-light); }
+    .streak-cell.done { background: var(--accent); color: white; }
+    .week-row-labels { display: flex; gap: 3px; margin-top: 4px; }
+    .week-row-labels span { flex: 1; font-size: 0.65rem; color: var(--text-muted); text-align: center; }
+
+    .week-section { margin-bottom: 32px; }
+    .week-section h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); color: var(--accent); }
+    .day-card { background: var(--white); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 8px; overflow: hidden; }
+    .day-card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; cursor: pointer; user-select: none; transition: background 0.15s; }
+    .day-card-header:hover { background: var(--accent-muted); }
+    .day-card-title { font-weight: 600; font-size: 0.95rem; }
+    .day-card-meta { display: flex; align-items: center; gap: 10px; }
+    .day-type { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+    .type-foundations { background: #d1fae5; color: #065f46; }
+    .type-concepts   { background: #fef3c7; color: #92400e; }
+    .type-advanced   { background: #ffe4e6; color: #9f1239; }
+    .type-project    { background: #ede9fe; color: #5b21b6; }
+    .type-review     { background: #e0f2fe; color: #075985; }
+    .chevron { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+    .day-card.open .chevron { transform: rotate(180deg); }
+    .day-card-body { display: none; border-top: 1px solid var(--border); }
+    .day-card.open .day-card-body { display: block; }
+
+    .module { display: block !important; min-height: auto !important; padding: 32px 18px; border: none; }
+    .module-inner { max-width: 100%; }
+    pre { color: #e0def4; }
+    code { color: inherit; }
+
+    .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .fc { perspective: 800px; height: 180px; cursor: pointer; }
+    .fc-inner { position: relative; width: 100%; height: 100%; transition: transform 0.5s; transform-style: preserve-3d; }
+    .fc.flipped .fc-inner { transform: rotateY(180deg); }
+    .fc-front, .fc-back { position: absolute; inset: 0; border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; }
+    .fc-front { background: var(--white); }
+    .fc-back { background: var(--accent); color: white; transform: rotateY(180deg); }
+    .fc-term { font-weight: 700; font-size: 1.05rem; margin-bottom: 8px; }
+    .fc-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: auto; }
+
+    .quiz-block { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); padding: 24px; margin-bottom: 20px; }
+    .quiz-q { font-weight: 600; margin-bottom: 16px; line-height: 1.5; }
+    .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-opt { background: var(--cream); border: 2px solid var(--border); border-radius: 8px; padding: 10px 16px; text-align: left; cursor: pointer; transition: all 0.15s; font-size: 0.9rem; }
+    .quiz-opt:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-muted); }
+    .quiz-opt.correct { border-color: #10b981; background: #d1fae5; color: #065f46; }
+    .quiz-opt.wrong   { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+    .quiz-explanation { margin-top: 12px; padding: 12px; background: var(--accent-muted); border-radius: 8px; font-size: 0.875rem; display: none; }
+    .quiz-explanation.visible { display: block; }
+
+    .diagram-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .diagram-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; cursor: pointer; }
+    .diagram-card img { width: 100%; height: 200px; object-fit: contain; background: white; padding: 12px; }
+    .diagram-label { padding: 12px 16px; font-weight: 600; font-size: 0.9rem; border-top: 1px solid var(--border); }
+
+    .resource-group { margin-bottom: 32px; }
+    .resource-group h3 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--accent); }
+    .resource-link { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; transition: opacity 0.15s; }
+    .resource-link:hover { opacity: 0.75; }
+    .resource-link:last-child { border-bottom: none; }
+    .resource-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+    .resource-text strong { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
+    .resource-text span { font-size: 0.85rem; color: var(--text-secondary); }
+
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--text-muted); }
+  </style>
+
+  <script src="main.js" defer></script>
+</head>
+<body>
+
+<nav class="tab-nav" aria-label="Course sections">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" data-tab="modules"    id="tab-modules">📖 Learning Content</button>
+    <button class="tab-btn"        data-tab="diagrams"   id="tab-diagrams">🗺 Diagrams</button>
+    <button class="tab-btn"        data-tab="flashcards" id="tab-flashcards">🃏 Flashcards</button>
+    <button class="tab-btn"        data-tab="quiz"       id="tab-quiz">✅ Quiz</button>
+    <button class="tab-btn"        data-tab="resources"  id="tab-resources">🔗 Resources</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-emoji">🧊</div>
+  <h1>3D AI for the Web</h1>
+  <p class="hero-subtitle">Build AI-powered 3D experiences for websites, web apps &amp; games</p>
+  <div class="hero-tags">
+    <span class="hero-tag">Three.js</span>
+    <span class="hero-tag">AI Tools</span>
+    <span class="hero-tag">21 Days</span>
+    <span class="hero-tag">Spline &amp; R3F</span>
+    <span class="hero-tag">30 min/day</span>
+  </div>
+  <button class="install-btn-hero" id="install-btn-hero">📲 Install App</button>
+</div>
+
+<div class="progress-card">
+  <div class="progress-ring-wrap">
+    <svg class="progress-ring" width="90" height="90" viewBox="0 0 90 90">
+      <circle class="ring-bg" cx="45" cy="45" r="37"/>
+      <circle class="ring-fg" id="progress-ring-fg" cx="45" cy="45" r="37"/>
+    </svg>
+    <div class="progress-ring-text">
+      <span class="progress-ring-pct" id="progress-pct">0%</span>
+      <span class="progress-ring-days" id="progress-ring-days">0 / 21</span>
+    </div>
+  </div>
+  <div class="streak-wrap">
+    <div class="streak-header">
+      <span class="streak-title">Daily Progress</span>
+      <span class="streak-count" id="streak-count">0 / 21 days</span>
+    </div>
+    <div class="streak-grid" id="day-grid"></div>
+    <div class="week-row-labels">
+      <span>Week 1</span><span>Week 2</span><span>Week 3</span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="section active container" id="section-modules" aria-labelledby="tab-modules">
+    <div id="modules-container"></div>
+    <div class="empty-state" id="modules-loading">Loading…</div>
+  </section>
+
+  <section class="section container" id="section-diagrams" aria-labelledby="tab-diagrams">
+    <h2 class="section-heading">Diagrams</h2>
+    <div class="diagram-grid" id="diagram-grid"></div>
+  </section>
+
+  <section class="section container" id="section-flashcards" aria-labelledby="tab-flashcards">
+    <h2 class="section-heading">Flashcards</h2>
+    <div class="flashcard-grid" id="flashcard-grid"><p class="empty-state">Loading…</p></div>
+  </section>
+
+  <section class="section container" id="section-quiz" aria-labelledby="tab-quiz">
+    <h2 class="section-heading">Knowledge Check</h2>
+    <div id="quiz-container"><p class="empty-state">Loading…</p></div>
+  </section>
+
+  <section class="section container" id="section-resources" aria-labelledby="tab-resources">
+    <h2 class="section-heading">Resources</h2>
+
+    <div class="resource-group">
+      <h3>🧊 3D Rendering &amp; Three.js</h3>
+      <a class="resource-link" href="https://threejs.org/docs/" target="_blank" rel="noopener">
+        <span class="resource-icon">📖</span>
+        <div class="resource-text"><strong>Three.js Documentation</strong><span>Official API reference and interactive examples</span></div>
+      </a>
+      <a class="resource-link" href="https://r3f.docs.pmnd.rs/" target="_blank" rel="noopener">
+        <span class="resource-icon">⚛️</span>
+        <div class="resource-text"><strong>React Three Fiber Docs</strong><span>React renderer for Three.js — hooks, Canvas, Drei</span></div>
+      </a>
+      <a class="resource-link" href="https://threejs-journey.com/" target="_blank" rel="noopener">
+        <span class="resource-icon">🎓</span>
+        <div class="resource-text"><strong>Three.js Journey</strong><span>Bruno Simon's comprehensive course — the gold standard</span></div>
+      </a>
+      <a class="resource-link" href="https://github.com/pmndrs/drei" target="_blank" rel="noopener">
+        <span class="resource-icon">🛠</span>
+        <div class="resource-text"><strong>@react-three/drei</strong><span>Useful helpers for R3F — cameras, loaders, controls, shaders</span></div>
+      </a>
+    </div>
+
+    <div class="resource-group">
+      <h3>🤖 AI 3D Generation</h3>
+      <a class="resource-link" href="https://www.meshy.ai/" target="_blank" rel="noopener">
+        <span class="resource-icon">✨</span>
+        <div class="resource-text"><strong>Meshy.ai</strong><span>Text-to-3D and image-to-3D — best quality in 2025</span></div>
+      </a>
+      <a class="resource-link" href="https://www.tripo3d.ai/" target="_blank" rel="noopener">
+        <span class="resource-icon">🔷</span>
+        <div class="resource-text"><strong>Tripo3D</strong><span>Fast AI 3D model generation with good topology</span></div>
+      </a>
+      <a class="resource-link" href="https://lumalabs.ai/genie" target="_blank" rel="noopener">
+        <span class="resource-icon">💡</span>
+        <div class="resource-text"><strong>Luma AI Genie</strong><span>Text and image-to-3D mesh from Luma Labs</span></div>
+      </a>
+    </div>
+
+    <div class="resource-group">
+      <h3>🎨 Design &amp; No-Code 3D</h3>
+      <a class="resource-link" href="https://spline.design/" target="_blank" rel="noopener">
+        <span class="resource-icon">🌀</span>
+        <div class="resource-text"><strong>Spline</strong><span>No-code 3D editor built for web — embed in seconds</span></div>
+      </a>
+      <a class="resource-link" href="https://www.blender.org/" target="_blank" rel="noopener">
+        <span class="resource-icon">🐂</span>
+        <div class="resource-text"><strong>Blender</strong><span>Free, open-source 3D suite — industry standard</span></div>
+      </a>
+      <a class="resource-link" href="https://www.mixamo.com/" target="_blank" rel="noopener">
+        <span class="resource-icon">🏃</span>
+        <div class="resource-text"><strong>Mixamo</strong><span>Free auto-rigging and motion capture library from Adobe</span></div>
+      </a>
+    </div>
+
+    <div class="resource-group">
+      <h3>🎮 Games, Physics &amp; Viewers</h3>
+      <a class="resource-link" href="https://rapier.rs/" target="_blank" rel="noopener">
+        <span class="resource-icon">⚡</span>
+        <div class="resource-text"><strong>Rapier.js</strong><span>Fast WASM physics engine — works great with @react-three/rapier</span></div>
+      </a>
+      <a class="resource-link" href="https://modelviewer.dev/" target="_blank" rel="noopener">
+        <span class="resource-icon">📦</span>
+        <div class="resource-text"><strong>&lt;model-viewer&gt;</strong><span>Google's web component for embedding 3D models with AR</span></div>
+      </a>
+      <a class="resource-link" href="https://sketchfab.com/" target="_blank" rel="noopener">
+        <span class="resource-icon">🌐</span>
+        <div class="resource-text"><strong>Sketchfab</strong><span>Huge library of downloadable 3D models — many free</span></div>
+      </a>
+    </div>
+
+    <div class="resource-group">
+      <h3>🔧 Optimization Tools</h3>
+      <a class="resource-link" href="https://gltf.report/" target="_blank" rel="noopener">
+        <span class="resource-icon">🔍</span>
+        <div class="resource-text"><strong>gltf.report</strong><span>Analyze and optimize GLTF files in the browser</span></div>
+      </a>
+      <a class="resource-link" href="https://gltf-transform.dev/" target="_blank" rel="noopener">
+        <span class="resource-icon">⚙️</span>
+        <div class="resource-text"><strong>glTF-Transform</strong><span>CLI and API for GLTF optimization, Draco compression, KTX2</span></div>
+      </a>
+    </div>
+  </section>
+</main>
+
+<script>
+const DAY_COUNT     = 21;
+const MODULE_FILES  = [
+  'modules/01-how-3d-works.html',
+  'modules/02-3d-software-landscape.html',
+  'modules/03-text-to-3d.html',
+  'modules/04-threejs-fundamentals.html',
+  'modules/05-react-three-fiber.html',
+  'modules/06-spline-for-web.html',
+  'modules/07-week1-capstone.html',
+  'modules/08-image-to-3d.html',
+  'modules/09-ai-textures.html',
+  'modules/10-ai-animation.html',
+  'modules/11-3d-for-websites.html',
+  'modules/12-3d-for-web-apps.html',
+  'modules/13-ai-coding-partner.html',
+  'modules/14-week2-capstone.html',
+  'modules/15-browser-3d-games.html',
+  'modules/16-ai-game-assets.html',
+  'modules/17-glsl-shaders.html',
+  'modules/18-performance-optimization.html',
+  'modules/19-blender-to-web.html',
+  'modules/20-full-ai-workflow.html',
+  'modules/21-final-capstone.html'
+];
+const MODULE_TITLES = [
+  'How 3D Works: Meshes, Materials & Lighting',
+  'The 3D Software Landscape',
+  'Text-to-3D AI: Meshy & Tripo3D',
+  'Three.js Fundamentals',
+  'React Three Fiber: 3D in React',
+  'Spline: No-Code 3D for Web',
+  'Week 1 Capstone: AI 3D Hero Section',
+  'Image-to-3D AI Tools',
+  'AI Texture Generation',
+  'AI Animation: Mixamo & Beyond',
+  '3D for Websites: Scroll & Parallax',
+  '3D for Web Apps: Configurators & Viewers',
+  'AI as Your 3D Coding Partner',
+  'Week 2 Capstone: 3D Product Configurator',
+  'Browser 3D Games with Three.js',
+  'AI Game Asset Creation',
+  'GLSL Shaders: Visual Magic',
+  'Performance Optimization for Web 3D',
+  'Blender to Web: Export Pipeline',
+  'Full AI-Assisted 3D Workflow',
+  'Final Capstone: Your 3D Web Experience'
+];
+const MODULE_TYPES  = [
+  'foundations','foundations','concepts',
+  'foundations','concepts','concepts','project',
+  'concepts','concepts','concepts',
+  'advanced','advanced','advanced','project',
+  'foundations','concepts','advanced',
+  'advanced','advanced','review','project'
+];
+const WEEK_NAMES    = [
+  '🧱 Week 1: 3D Foundations + AI Toolkit',
+  '⚡ Week 2: AI-Powered 3D for Web & Apps',
+  '🎮 Week 3: Games, Shaders & Final Project'
+];
+const WEEK_RANGES   = [[0,6],[7,13],[14,20]];
+const DIAGRAM_FILES = [
+  'diagrams/3d-rendering-pipeline.svg',
+  'diagrams/ai-3d-workflow.svg',
+  'diagrams/threejs-scene-graph.svg'
+];
+const STORAGE_KEY   = 'course-3d-ai-progress';
+
+/* Tab switching */
+const tabs     = document.querySelectorAll('.tab-btn');
+const sections = document.querySelectorAll('.section');
+let modulesLoaded = false;
+
+tabs.forEach(btn => {
+  btn.addEventListener('click', async () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    sections.forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('section-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'flashcards') loadFlashcards();
+    if (btn.dataset.tab === 'quiz')       loadQuiz();
+    if (btn.dataset.tab === 'diagrams')   renderDiagrams();
+  });
+});
+
+/* Day grid + donut ring */
+function buildDayGrid() {
+  const grid = document.getElementById('day-grid');
+  let done = [];
+  try { done = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
+  for (let i = 1; i <= DAY_COUNT; i++) {
+    const cell = document.createElement('button');
+    cell.className = 'streak-cell' + (done.includes(i) ? ' done' : '');
+    cell.textContent = i;
+    cell.title = 'Day ' + i;
+    cell.addEventListener('click', () => toggleDay(i, cell));
+    grid.appendChild(cell);
+  }
+  updateProgress(done.length);
+}
+function toggleDay(n, el) {
+  let done = [];
+  try { done = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
+  const idx = done.indexOf(n);
+  if (idx === -1) done.push(n); else done.splice(idx, 1);
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(done)); } catch(e) {}
+  el.classList.toggle('done');
+  updateProgress(done.length);
+}
+function updateProgress(count) {
+  const pct = DAY_COUNT ? Math.round(count / DAY_COUNT * 100) : 0;
+  const circ = 232.5;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-ring-days').textContent = count + ' / ' + DAY_COUNT;
+  document.getElementById('progress-ring-fg').style.strokeDashoffset = circ - (circ * pct / 100);
+  document.getElementById('streak-count').textContent = count + ' / ' + DAY_COUNT + ' days';
+}
+buildDayGrid();
+
+/* Build accordion */
+function loadModules() {
+  const container = document.getElementById('modules-container');
+  const loading   = document.getElementById('modules-loading');
+
+  WEEK_RANGES.forEach(([start, end], wi) => {
+    const section = document.createElement('div');
+    section.className = 'week-section';
+    section.innerHTML = `<h3>${WEEK_NAMES[wi]}</h3>`;
+
+    for (let i = start; i <= end; i++) {
+      const title = MODULE_TITLES[i] || ('Day ' + (i + 1));
+      const type  = MODULE_TYPES[i]  || '';
+      const card  = document.createElement('div');
+      card.className = 'day-card';
+      card.innerHTML = `
+        <div class="day-card-header">
+          <span class="day-card-title">Day ${i + 1} — ${title}</span>
+          <div class="day-card-meta">
+            ${type ? `<span class="day-type type-${type}">${type}</span>` : ''}
+            <span class="chevron">▾</span>
+          </div>
+        </div>
+        <div class="day-card-body"></div>`;
+
+      let loaded = false;
+      const header = card.querySelector('.day-card-header');
+      const body   = card.querySelector('.day-card-body');
+
+      header.addEventListener('click', async () => {
+        const opening = !card.classList.contains('open');
+        card.classList.toggle('open');
+        if (opening && !loaded) {
+          body.innerHTML = '<p style="padding:16px;color:var(--text-muted)">Loading…</p>';
+          try {
+            const resp = await fetch(MODULE_FILES[i]);
+            if (resp.ok) {
+              body.innerHTML = await resp.text();
+              loaded = true;
+              if (typeof initIndexQuizzes === 'function') initIndexQuizzes();
+              if (typeof initChatWindows  === 'function') initChatWindows();
+              setupChatAutoPlay(body);
+            } else {
+              body.innerHTML = '<p style="padding:16px;color:var(--text-muted)">Content not found.</p>';
+            }
+          } catch(e) {
+            body.innerHTML = '<p style="padding:16px;color:var(--text-muted)">Failed to load.</p>';
+          }
+        }
+      });
+
+      section.appendChild(card);
+    }
+    container.appendChild(section);
+  });
+
+  loading.style.display = 'none';
+}
+loadModules();
+
+/* Chat autoplay */
+function setupChatAutoPlay(container) {
+  container.querySelectorAll('.chat-window').forEach(win => {
+    if (win.dataset.autoplay) return;
+    win.dataset.autoplay = '1';
+    const nextBtn = win.querySelector('.chat-next-btn');
+    if (!nextBtn) return;
+    const total = win.querySelectorAll('[data-msg]').length;
+    let shown = 0;
+    const obs = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+      function advance() {
+        if (shown >= total) return;
+        nextBtn.click(); shown++;
+        setTimeout(advance, 1600);
+      }
+      setTimeout(advance, 600);
+    }, { threshold: 0.3 });
+    obs.observe(win);
+  });
+}
+
+/* Standalone flashcard flip */
+document.addEventListener('click', function(e) {
+  const card = e.target.closest('.flashcard');
+  if (card && !card.closest('.flashcard-deck')) card.classList.toggle('flipped');
+});
+
+/* Quiz option feedback */
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.quiz-option');
+  if (!btn) return;
+  const card = btn.closest('.quiz-card');
+  if (!card || card.classList.contains('answered')) return;
+  card.classList.add('answered');
+  const correct = btn.dataset.correct === 'true';
+  card.querySelectorAll('.quiz-option').forEach(o => {
+    if (o.dataset.correct === 'true') o.classList.add('correct');
+    else if (o === btn) o.classList.add('incorrect');
+  });
+  const explanation = correct ? btn.dataset.explanationCorrect : btn.dataset.explanationWrong;
+  if (explanation) {
+    const fb = document.createElement('p');
+    fb.className = 'quiz-feedback';
+    fb.style.cssText = `background:${correct ? '#d1fae5' : '#fee2e2'};border-left:3px solid ${correct ? '#10b981' : '#ef4444'};color:${correct ? '#065f46' : '#991b1b'};padding:10px 14px;border-radius:6px;margin-top:10px;font-size:0.875rem;`;
+    fb.textContent = explanation;
+    card.appendChild(fb);
+  }
+});
+
+/* Flashcards tab */
+let flashcardsLoaded = false;
+async function loadFlashcards() {
+  if (flashcardsLoaded) return;
+  const grid = document.getElementById('flashcard-grid');
+  try {
+    const cards = await (await fetch('./data/flashcards.json')).json();
+    grid.innerHTML = '';
+    cards.forEach(c => {
+      const el = document.createElement('div');
+      el.className = 'fc';
+      el.innerHTML = `<div class="fc-inner">
+        <div class="fc-front"><div class="fc-term">${c.term}</div><div class="fc-hint">Click to reveal</div></div>
+        <div class="fc-back"><div class="fc-term">${c.definition}</div></div>
+      </div>`;
+      el.addEventListener('click', () => el.classList.toggle('flipped'));
+      grid.appendChild(el);
+    });
+    flashcardsLoaded = true;
+  } catch(e) { grid.innerHTML = '<p class="empty-state">Flashcards loading…</p>'; }
+}
+
+/* Quiz tab */
+let quizLoaded = false;
+async function loadQuiz() {
+  if (quizLoaded) return;
+  const container = document.getElementById('quiz-container');
+  const urls = MODULE_FILES.map((_, i) => `./data/quiz-${String(i+1).padStart(2,'0')}.json`);
+  let allQ = [];
+  for (const url of urls) {
+    try { const r = await fetch(url); if (r.ok) { const d = await r.json(); allQ = allQ.concat(d.questions || d); } } catch(e) {}
+  }
+  if (!allQ.length) { container.innerHTML = '<p class="empty-state">Quiz data loading…</p>'; return; }
+  container.innerHTML = '';
+  allQ.forEach((q, qi) => {
+    const block = document.createElement('div');
+    block.className = 'quiz-block';
+    const opts = q.options.map((o, oi) => `<button class="quiz-opt" data-idx="${oi}">${o}</button>`).join('');
+    block.innerHTML = `<div class="quiz-q">Q${qi+1}: ${q.question}</div><div class="quiz-opts">${opts}</div><div class="quiz-explanation"></div>`;
+    block.querySelectorAll('.quiz-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        block.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+        const correct = parseInt(btn.dataset.idx) === q.answer;
+        btn.classList.add(correct ? 'correct' : 'wrong');
+        if (!correct) block.querySelectorAll('.quiz-opt')[q.answer].classList.add('correct');
+        const exp = block.querySelector('.quiz-explanation');
+        exp.textContent = q.explanation || (correct ? '✓ Correct!' : '✗ Incorrect.');
+        exp.classList.add('visible');
+      });
+    });
+    container.appendChild(block);
+  });
+  quizLoaded = true;
+}
+
+/* Diagrams tab */
+function renderDiagrams() {
+  const grid = document.getElementById('diagram-grid');
+  if (grid.children.length > 0) return;
+  if (!DIAGRAM_FILES.length) { grid.innerHTML = '<p class="empty-state">No diagrams yet.</p>'; return; }
+  DIAGRAM_FILES.forEach(f => {
+    const label = f.replace(/.*\//, '').replace(/\.[^.]+$/, '').replace(/-/g, ' ');
+    const card = document.createElement('div');
+    card.className = 'diagram-card';
+    card.innerHTML = `<img src="${f}" alt="${label}" loading="lazy"><div class="diagram-label">${label}</div>`;
+    card.addEventListener('click', () => openLightbox(f, label));
+    grid.appendChild(card);
+  });
+}
+
+function openLightbox(src, label) {
+  const lb = document.createElement('div');
+  lb.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;padding:24px;';
+  lb.innerHTML = `<img src="${src}" alt="${label}" style="max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,0.5);">`;
+  lb.addEventListener('click', () => lb.remove());
+  document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { lb.remove(); document.removeEventListener('keydown', esc); } });
+  document.body.appendChild(lb);
+}
+
+/* PWA install */
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  document.getElementById('install-btn-hero').classList.add('visible');
+});
+document.getElementById('install-btn-hero').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') document.getElementById('install-btn-hero').classList.remove('visible');
+  deferredPrompt = null;
+});
+
+/* Service worker */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(console.warn);
+}
+</script>
+</body>
+</html>

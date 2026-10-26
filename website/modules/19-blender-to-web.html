@@ -1,0 +1,98 @@
+<section class="module" id="module-19">
+  <h2>Day 19 - Blender to Web: Export Pipeline</h2>
+
+  <div class="callout-accent">
+    <strong>What you'll learn today:</strong> How to export a 3D model from Blender as a production-ready GLB file, optimize it with gltf-transform, and load it in Three.js or React Three Fiber.
+  </div>
+
+  <h3>The Blender Export Flow</h3>
+  <p>Blender is the bridge between AI-generated models and your web scene. The export pipeline has three phases: prepare in Blender, optimize with gltf-transform, and load in the browser.</p>
+
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <div>
+      <strong>Prepare in Blender</strong>
+      <p>Apply all modifiers (right-click each one). Apply transforms with Ctrl+A &gt; All Transforms. Pack textures with File &gt; External Data &gt; Pack Resources.</p>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <div>
+      <strong>Export as GLB</strong>
+      <p>File &gt; Export &gt; glTF 2.0. Choose GLB format. Enable "Apply Transformations" and "Draco Mesh Compression" under Data &gt; Mesh. This gives you a single compressed binary file.</p>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <div>
+      <strong>Optimize with gltf-transform</strong>
+      <p>Run the CLI to further reduce file size. Inspect first, then optimize. Target under 3 MB for most web models.</p>
+    </div>
+  </div>
+
+  <h3>gltf-transform Commands</h3>
+  <div class="callout-info">
+    <strong>Install once:</strong> <code>npm install -g @gltf-transform/cli</code>
+  </div>
+
+  <pre><code class="language-bash"># Inspect what's inside your file
+npx gltf-transform inspect input.glb
+
+# Compress with Draco (5-10x size reduction)
+npx gltf-transform optimize input.glb output.glb --draco
+
+# Resize embedded textures to 1024px
+npx gltf-transform resize --width 1024 --height 1024 input.glb output.glb</code></pre>
+
+  <h3>Loading in Three.js</h3>
+  <div class="callout-warning">
+    <strong>Draco requires a decoder:</strong> If you compressed with Draco, you must use DRACOLoader alongside GLTFLoader - otherwise the model will fail to load silently.
+  </div>
+
+  <pre><code class="language-js">import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+
+const loader = new GLTFLoader();
+loader.setDRACOLoader(dracoLoader);
+
+loader.load('/models/character.glb', (gltf) => {
+  scene.add(gltf.scene);
+});</code></pre>
+
+  <h3>Common Pitfalls</h3>
+
+  <div class="quiz-card"
+       data-correct="2"
+       data-explanation-0="Draco is for mesh compression, not texture format conversion. It reduces geometry data size."
+       data-explanation-1="Apply Transformations bakes in any pending scale, rotation, and location values - without it, a model scaled in Blender may have unexpected transform properties in Three.js."
+       data-explanation-2="Correct! Blender uses Z-up, GLTF uses Y-up. The exporter converts this automatically, but the model may still appear rotated in some edge cases. A -90-degree X rotation fixes it."
+       data-explanation-3="Texture packing embeds images in the GLB. Without it, textures may appear as missing in the browser.">
+    <p class="quiz-q">A model exported from Blender appears rotated 90 degrees on its side in Three.js. What is the most likely cause?</p>
+    <div class="quiz-opts">
+      <button class="quiz-option">Draco compression changed the texture coordinates</button>
+      <button class="quiz-option">Apply Transformations was not enabled during export</button>
+      <button class="quiz-option">Blender uses Z-up axis but GLTF uses Y-up</button>
+      <button class="quiz-option">External textures were not packed into the file</button>
+    </div>
+  </div>
+
+  <div class="quiz-card"
+       data-correct="0"
+       data-explanation-0="Correct! GLB is a single binary file containing all geometry, materials, and textures - ideal for web deployment."
+       data-explanation-1="GLTF+Bin splits the scene into a JSON descriptor and a separate binary file, plus external texture images. More files to serve."
+       data-explanation-2="OBJ is a legacy format with no material support built in and no animation. Not suitable for modern web workflows."
+       data-explanation-3="FBX is Autodesk's proprietary format and is not directly loadable in Three.js without conversion.">
+    <p class="quiz-q">Which export format is best for web deployment from Blender?</p>
+    <div class="quiz-opts">
+      <button class="quiz-option">GLB (binary GLTF, single file)</button>
+      <button class="quiz-option">GLTF + Bin (separate JSON and binary)</button>
+      <button class="quiz-option">OBJ with MTL material file</button>
+      <button class="quiz-option">FBX for maximum compatibility</button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,156 @@
+<section class="module" id="module-5">
+  <h2>Day 5: React Three Fiber: 3D in React</h2>
+
+  <div class="callout-accent">
+    <strong>The big idea:</strong> React Three Fiber lets you describe a Three.js scene as a JSX component tree. Every Three.js class becomes a lowercase JSX tag — <code>&lt;mesh&gt;</code>, <code>&lt;boxGeometry&gt;</code>, <code>&lt;meshStandardMaterial&gt;</code> — and the scene graph is just React's component tree.
+  </div>
+
+  <h3>Why R3F?</h3>
+  <p>
+    Vanilla Three.js is imperative: you call <code>scene.add(mesh)</code>, <code>renderer.render()</code>, manage cleanup yourself.
+    React Three Fiber is declarative: you describe <em>what</em> should exist, and R3F handles creating, updating, and destroying Three.js objects as your React state changes.
+    This means you get React state, hooks, context, and the entire React ecosystem working alongside your 3D scene.
+  </p>
+
+  <h3>Project Setup</h3>
+
+  <div class="callout-info">
+    <strong>Install:</strong> <code>npm create vite@latest my-r3f-app -- --template react</code> then <code>npm install three @react-three/fiber @react-three/drei</code>
+  </div>
+
+  <h3>The Canvas and Scene Graph</h3>
+
+  <div class="step-cards">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Wrap in &lt;Canvas&gt;</strong>
+        <p>The root component that creates the WebGL renderer, default camera, and animation loop automatically.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Add a &lt;mesh&gt;</strong>
+        <p>JSX children of mesh auto-attach: <code>&lt;boxGeometry&gt;</code> becomes mesh.geometry, <code>&lt;meshStandardMaterial&gt;</code> becomes mesh.material.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Animate with useFrame</strong>
+        <p>The R3F hook that runs your callback every frame — <code>useFrame((state, delta) =&gt; { ... })</code>. Use <code>delta</code> for framerate-independent animation.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Add drei helpers</strong>
+        <p><code>&lt;OrbitControls&gt;</code> for camera, <code>&lt;Environment preset="city"&gt;</code> for lighting, <code>&lt;Html&gt;</code> for overlays.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Complete R3F Scene</h3>
+
+  <pre><code class="language-jsx">import { Suspense, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Environment, useGLTF, Html } from '@react-three/drei';
+
+function Model({ url }) {
+  const { scene } = useGLTF(url);
+  return &lt;primitive object={scene} /&gt;;
+}
+
+function SpinningCube() {
+  const ref = useRef();
+  useFrame((state, delta) =&gt; {
+    ref.current.rotation.y += delta * 0.8;
+  });
+  return (
+    &lt;mesh ref={ref}&gt;
+      &lt;boxGeometry args={[1, 1, 1]} /&gt;
+      &lt;meshStandardMaterial color="#0d9488" roughness={0.3} metalness={0.2} /&gt;
+    &lt;/mesh&gt;
+  );
+}
+
+export default function App() {
+  return (
+    &lt;div style={{ width: '100vw', height: '100vh' }}&gt;
+      &lt;Canvas camera={{ position: [0, 1.5, 4], fov: 60 }}&gt;
+        &lt;Environment preset="city" /&gt;
+        &lt;Suspense fallback={
+          &lt;Html center&gt;&lt;p style={{color:'white'}}&gt;Loading…&lt;/p&gt;&lt;/Html&gt;
+        }&gt;
+          &lt;Model url="/model.glb" /&gt;
+        &lt;/Suspense&gt;
+        &lt;OrbitControls /&gt;
+      &lt;/Canvas&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+  <h3>Core Hooks Reference</h3>
+
+  <p>
+    <strong>useFrame(callback)</strong> — runs every animation frame inside the R3F loop.
+    The callback receives <code>(state, delta)</code>.
+    State includes <code>state.clock.elapsedTime</code> for time-based effects.
+  </p>
+  <p>
+    <strong>useThree()</strong> — access the underlying renderer, scene, and camera from any component inside Canvas.
+    Returns <code>{ scene, camera, gl, size }</code>.
+  </p>
+  <p>
+    <strong>useGLTF(url)</strong> from drei — loads a GLB/GLTF model with automatic caching.
+    Returns <code>{ scene, nodes, materials, animations }</code>.
+    Must be inside a Suspense boundary since it throws a Promise while loading.
+  </p>
+
+  <div class="callout-info">
+    <strong>The args prop:</strong> R3F JSX elements map to Three.js constructors. Pass constructor arguments as an array via the <code>args</code> prop. <code>&lt;sphereGeometry args={[0.5, 32, 32]} /&gt;</code> is equivalent to <code>new THREE.SphereGeometry(0.5, 32, 32)</code>.
+  </div>
+
+  <div class="quiz-card" data-correct="0"
+    data-explanation-0="Correct! &lt;Canvas&gt; is the root R3F component — it creates the WebGLRenderer, a default PerspectiveCamera, and the animation loop, replacing all that manual Three.js setup."
+    data-explanation-1="&lt;Scene&gt; is not an R3F component — in R3F the scene is created automatically inside Canvas."
+    data-explanation-2="&lt;WebGL&gt; does not exist in React Three Fiber."
+    data-explanation-3="&lt;Renderer&gt; does not exist as a React component in R3F.">
+    <p class="quiz-question">Which R3F component automatically creates the WebGL renderer, camera, and animation loop?</p>
+    <div class="quiz-options">
+      <button class="quiz-option">&lt;Canvas&gt;</button>
+      <button class="quiz-option">&lt;Scene&gt;</button>
+      <button class="quiz-option">&lt;WebGL&gt;</button>
+      <button class="quiz-option">&lt;Renderer&gt;</button>
+    </div>
+  </div>
+
+  <div class="quiz-card" data-correct="3"
+    data-explanation-0="useEffect fires after render and is not connected to the R3F animation loop — it would not run every frame."
+    data-explanation-1="useAnimation is not a real R3F hook."
+    data-explanation-2="useTick is not a real R3F hook."
+    data-explanation-3="Correct! useFrame runs inside R3F's render loop, giving you (state, delta) each frame. delta is essential for framerate-independent animation.">
+    <p class="quiz-question">Which R3F hook runs a callback on every animation frame?</p>
+    <div class="quiz-options">
+      <button class="quiz-option">useEffect</button>
+      <button class="quiz-option">useAnimation</button>
+      <button class="quiz-option">useTick</button>
+      <button class="quiz-option">useFrame</button>
+    </div>
+  </div>
+
+  <div class="quiz-card" data-correct="2"
+    data-explanation-0="width, height, depth are not valid R3F/Three.js props — geometry constructors take positional arguments."
+    data-explanation-1="size is not the prop name for constructor arguments in R3F."
+    data-explanation-2="Correct! The args prop takes an array that is spread into the Three.js constructor call: args={[1,2,1]} becomes new BoxGeometry(1, 2, 1)."
+    data-explanation-3="params is not the prop name — R3F always uses args for constructor arguments.">
+    <p class="quiz-question">How do you pass arguments to BoxGeometry(1, 2, 1) in R3F JSX?</p>
+    <div class="quiz-options">
+      <button class="quiz-option">width={1} height={2} depth={1}</button>
+      <button class="quiz-option">size={[1, 2, 1]}</button>
+      <button class="quiz-option">args={[1, 2, 1]}</button>
+      <button class="quiz-option">params={[1, 2, 1]}</button>
+    </div>
+  </div>
+</section>
