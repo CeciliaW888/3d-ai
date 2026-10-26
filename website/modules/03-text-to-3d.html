@@ -59,20 +59,20 @@ loader.load('./my-model.glb', (gltf) => {
   <div class="quiz-card" data-correct="2" data-explanation-0="Multi-view diffusion generates images of the 3D object, which are then used to reconstruct geometry — it's not photogrammetry (which needs real photos)." data-explanation-1="NeRF is a 3D reconstruction technique used for captured scenes, not AI text-to-3D generation." data-explanation-2="Correct! Text-to-3D tools like Meshy generate multi-view images from the text prompt using diffusion, then reconstruct a 3D mesh with texture projection." data-explanation-3="Voxel modeling is a manual technique using 3D pixels (like Minecraft), not AI generation.">
     <p class="quiz-question">How do tools like Meshy.ai generate a 3D model from a text prompt?</p>
     <ul class="quiz-options">
-      <li>Photogrammetry from stored real-world photos</li>
-      <li>Neural Radiance Field (NeRF) training</li>
-      <li>Diffusion-generated multi-view images reconstructed into a mesh</li>
-      <li>Procedural voxel modeling</li>
+      <li class="quiz-option">Photogrammetry from stored real-world photos</li>
+      <li class="quiz-option">Neural Radiance Field (NeRF) training</li>
+      <li class="quiz-option">Diffusion-generated multi-view images reconstructed into a mesh</li>
+      <li class="quiz-option">Procedural voxel modeling</li>
     </ul>
   </div>
 
   <div class="quiz-card" data-correct="0" data-explanation-0="Correct! GLB includes the geometry AND all PBR textures (albedo, normal, roughness, metalness, AO) embedded in a single binary file — ready to load with GLTFLoader." data-explanation-1="OBJ is geometry-only; textures are in a separate MTL file and the texture images are separate too." data-explanation-2="FBX is primarily used for game engines and includes animation rigs, but it's not the recommended format for direct web use." data-explanation-3="PNG is an image format — it cannot store 3D geometry.">
     <p class="quiz-question">Why is GLB the best format to download from AI 3D tools for web projects?</p>
     <ul class="quiz-options">
-      <li>It bundles geometry and PBR textures in one binary file, ready for Three.js</li>
-      <li>It is the lightest format with no texture data</li>
-      <li>It stores animation rigs better than any other format</li>
-      <li>It can be opened directly as an image</li>
+      <li class="quiz-option">It bundles geometry and PBR textures in one binary file, ready for Three.js</li>
+      <li class="quiz-option">It is the lightest format with no texture data</li>
+      <li class="quiz-option">It stores animation rigs better than any other format</li>
+      <li class="quiz-option">It can be opened directly as an image</li>
     </ul>
   </div>
 </section>
